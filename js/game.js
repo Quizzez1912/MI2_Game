@@ -1,4 +1,5 @@
      var config = {
+        type: Phaser.AUTO,
         width: 256,
         height: 272,
         backgroundColor: 0x000000,

@@ -12,14 +12,12 @@ class Scene2 extends Phaser.Scene{
         this.ship2 = this.add.sprite(config.width / 2 , config.height / 2 , "ship2");
         this.ship3 = this.add.sprite(config.width / 2 + 50 , config.height / 2 , "ship3");
         
-        this.add.text(20,20, "Playing game", {font: "25px Arial",fill:"yellow"});
-
         // Animation ship
         this.anims.create({
             key: "ship1_anim",                                  // Animation Name ship_anim
             frames: this.anims.generateFrameNumbers("ship"),    // Using the frames from the "ship" spritesheet
             frameRate:20,                                       // 20 frames per Second
-            repeat: -1,                                          //  -1 = infinite repeat
+            repeat: -1                                         //  -1 = infinite repeat
                                                  
         });
 
@@ -48,6 +46,20 @@ class Scene2 extends Phaser.Scene{
             hideOnComplete: true                                            
         });
 
+        this.ship1.play("ship1_anim");
+        this.ship2.play("ship2_anim");
+        this.ship3.play("ship3_anim");
+
+        this.ship1.setInteractive();
+        this.ship2.setInteractive();
+        this.ship3.setInteractive();
+
+        this.input.on("gameobjectdown", this.destroyShip,this);
+
+
+        this.add.text(20,20, "Playing game", {font: "25px Arial",fill:"yellow"});
+
+
         this.anims.create({
             key:"red",                                  // Animation Name red
             frames:this.anims.generateFrameNumbers("power-up",{
@@ -69,24 +81,28 @@ class Scene2 extends Phaser.Scene{
             repeat : -1
 
         });
-
-        this.powerUps = this.physics.add.group();
+       
+        this.physics.world.setBoundsCollision();
+       
+        this.powerUps = this.add.group();
 
         var maxObjects = 4;
-        for (var i = 0; i <= maxObjects;i++){
+        for (var i = 0; i <= maxObjects;i++) {
            var powerUp = this.physics.add.sprite(16, 16, "power-up");
-            this.powerUps.add(this.powerUp);
+            this.powerUps.add(powerUp);
             powerUp.setRandomPosition(0, 0, game.config.width, game.config.height);
         }
 
+        if (Math.random() > 0.5) {
+            powerUp.play("red");
 
+        } else {
+            powerUp.play("gray");
+        }
 
-
-        this.ship1.play("ship1_anim");
-        this.ship2.play("ship2_anim");
-        this.ship3.play("ship3_anim");
-
-
+        powerUp.setVelocity(100,100);
+        powerUp.setCollideWorldBounds(true);
+        powerUp.setBounce(1);
 
 
     }
@@ -122,11 +138,9 @@ class Scene2 extends Phaser.Scene{
         this.moveShip(this.ship2,2);
         this.moveShip(this.ship3,3);
 
-        this.ship1.setInteractive();
-        this.ship2.setInteractive();
-        this.ship3.setInteractive();
+       
 
-        this.input.on("gameobjectdown", this.destroyShip,this)
+        
 
         
 
