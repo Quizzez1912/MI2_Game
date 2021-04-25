@@ -20,7 +20,8 @@ class Scene1 extends Phaser.Scene {
         // Preload für das Game
         
         this.load.image("game_bg","assets/game_bg.png");
-        this.load.image("player","assets/oni.png");
+        this.load.image("player","assets/heart1.png");
+
         this.load.spritesheet("heart", "assets/spritesheets/UI/heart.png", {
             frameWidth: 64,
             frameHeigth: 64
@@ -91,7 +92,7 @@ class Scene1 extends Phaser.Scene {
             loop: false,
             delay: 0
         }
-        this.music.play(musicConfig);
+       //this.music.play(musicConfig);
 
 
         this.add.text(20,20, "Pre Game");
@@ -142,10 +143,14 @@ class Scene1 extends Phaser.Scene {
         this.heart.play("heartfull_anim");
 
         //! TEST ENDE
+          
+        //! START SCENE2
+
+        this.scene.start("playGame");
     }
 
     update(){
-        
+          
     }
 
   

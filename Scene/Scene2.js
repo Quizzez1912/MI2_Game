@@ -12,11 +12,13 @@ class Scene2 extends Phaser.Scene{
         // Background des Spieles
         this.background = this.add.image(0,0,"game_bg");
         this.background.setOrigin(0,0); 
-        
+        this.physics.world.gravity.y = 400;
         // Player
         this.cursorKeys = this.input.keyboard.createCursorKeys();
-        this.player = this.physics.add.image(config.width/2 , config.height/2,"player");
-
+        this.player = this.physics.add.image(100 , 718,"player");
+        this.player.setCollideWorldBounds(true);
+        console.log(this.player.width);
+       
         
 
 
@@ -31,7 +33,7 @@ class Scene2 extends Phaser.Scene{
         
         this.movePlayerManager();
        
-      
+        //console.log(this.player.x);    
 
 
         
@@ -47,16 +49,13 @@ class Scene2 extends Phaser.Scene{
             } else {
                 this.player.setVelocityX(0);
             }
-            
-            if(this.cursorKeys.up.isDown){
+            // Jump
+            if(this.cursorKeys.up.isDown && this.player.body.onFloor()){
                 this.player.setVelocityY(-gameSettings.playerSpeed);
-                }else if(this.cursorKeys.down.isDown){
-                this.player.setVelocityY(gameSettings.playerSpeed);
-            } else {
-                    this.player.setVelocityY(0);
-                }  
+                }
+            }  
             
-        }
+        
 
       
        
