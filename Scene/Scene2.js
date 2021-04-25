@@ -17,8 +17,7 @@ class Scene2 extends Phaser.Scene{
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.player = this.physics.add.image(config.width/2 , config.height/2,"player");
 
-
-       
+        
 
 
 
