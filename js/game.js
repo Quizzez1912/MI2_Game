@@ -1,3 +1,7 @@
+     var gameSettings = {
+         playerSpeed: 200,
+     }
+     
      var config = {
         type: Phaser.AUTO,
         width: 256,
