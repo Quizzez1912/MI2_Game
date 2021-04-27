@@ -29,9 +29,10 @@ class Scene1 extends Phaser.Scene {
         //! Preload für das Game
          
         //* Hintergrund für das Spiel ( Parallax)
-        this.load.image("sky", "assets/sky.png");
-        this.load.image("tree", "assets/tree.png");
-        this.load.image("ground", "assets/ground.png");
+        this.load.image("sky", "assets/sky2.png");
+        this.load.image("mountain","assets/mountain.png")
+        this.load.image("tree", "assets/tree2.png");
+        this.load.image("ground", "assets/street.png");
        
 
         //* Object Spritesheets & Atlas

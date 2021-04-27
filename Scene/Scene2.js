@@ -46,14 +46,19 @@ class Scene2 extends Phaser.Scene{
         this.sky.setOrigin(0,0);
         this.sky.setScrollFactor(0);
         
+        this.mountain = this.add.tileSprite(0,0,game.config.width, game.config.height, "mountain");
+        this.mountain.setOrigin(0,0);
+        this.mountain.setScrollFactor(0);
+
+
         // tree Layer mit Höhe von 350 pixel
-        this.tree = this.add.tileSprite(0, 0, game.config.width,350, "tree");
+        this.tree = this.add.tileSprite(0, 0, game.config.width,game.config.height, "tree");
         this.tree.setOrigin(0, 1);
         this.tree.setScrollFactor(0);
         this.tree.y= game.config.height - 100;
 
         // Ground Layer mit Höhe von 50px
-        this.ground = this.add.tileSprite(0, 0, game.config.width*3, 50, "ground");
+        this.ground = this.add.tileSprite(0, 1, game.config.width*3,50,"ground");
         this.ground.setOrigin(0,1);
         this.ground.setScrollFactor(0);
         this.ground.y = game.config.height;
@@ -153,7 +158,8 @@ class Scene2 extends Phaser.Scene{
         
 
         // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes
-        this.sky.tilePositionX = this.myCam.scrollX * .3;
+        this.sky.tilePositionX = this.myCam.scrollX * .2;
+        this.mountain.tilePositionX = this.myCam.scrollX * .4;
         this.tree.tilePositionX = this.myCam.scrollX * .6;
         this.ground.tilePositionX = this.myCam.scrollX;
 
