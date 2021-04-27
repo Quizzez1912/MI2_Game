@@ -14,11 +14,30 @@ class Scene2 extends Phaser.Scene{
         this.add.text(20,20, "Main Game");   
         
         //! UI Create
+        //* Healthbar
         this.hpValue = 6;
         this.hp = this.add.sprite(config.width-200, 10,"hp");
         this.hp.setOrigin(0,0);
         this.hp.setDepth(10);
         this.hp.setScrollFactor(0);
+
+        //* Ricebar
+        this.avaibleRice = 100;
+        this.riceballs = this.add.image( 450, 10,"ricebowl").setScale(2);
+        this.riceballs.setOrigin(0,0);
+        this.riceballs.setDepth(10);
+        this.riceballs.setScrollFactor(0);
+        this.riceCount = this.add.text(300,10, "0" + " x",{
+            font: "65px Arial",
+            fill: "#ff0044",
+                
+        });
+        this.riceCount.setOrigin(0,0);
+        this.riceCount.setScrollFactor(0);
+        this.riceCount.setDepth(10);
+
+
+
 
         //! Background Create
         // Add SKY layer               
@@ -48,12 +67,24 @@ class Scene2 extends Phaser.Scene{
         this.spacebar =  this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.player = this.physics.add.image(100 , 718-100,"player");
     
-    
+        //!PickUP
+        this.ricebowl = this.physics.add.group({
+            key: "ricebowl",
+            repeat : 0,
+        });
+        this.ricebowl.children.iterate(child => {
+            this.physics.add.collider(child, this.ground);
+            child.x = Phaser.Math.Between(500, 1000);
+            child.y = 668;
+            child.setImmovable(true);
+        });
+
+
         //! Enemies
         //* Wasabi Group
        
         this.wasabi = this.physics.add.group({
-            key: 'wasabi',
+            key: "wasabi",
             repeat: 6,
         });
         this.wasabi.children.iterate(child => {
@@ -71,7 +102,9 @@ class Scene2 extends Phaser.Scene{
         //! Collider
 
         this.physics.add.collider(this.player, this.ground);
-        this.physics.add.overlap(this.player,this.wasabi,this.wasabiHit,null , this)
+        this.physics.add.overlap(this.player,this.wasabi,this.wasabiHit,null , this);
+        this.physics.add.overlap(this.player,this.ricebowl,this.ricebowlHit,null , this);
+        
 
         //! Main Camera
         this.myCam = this.cameras.main;
@@ -95,9 +128,10 @@ class Scene2 extends Phaser.Scene{
     
     //! Update 
     update() {
-       this.time++;
+      /* //TODO für TEST ERSTMAL AUS
+        this.time++;
        this.timeCount.setText((this.time/60).toFixed(2));
-
+    */
         this.movePlayerManager();
         this.shootPlayerManager()
 
@@ -141,9 +175,14 @@ class Scene2 extends Phaser.Scene{
         //* Player shoot    
         shootPlayerManager(){
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
+                console.log("Vor dem Abschießen noch " + this.avaibleRice + " Reisbaelle übrig");
+                if(this.avaibleRice > 0){
                 this.shootRiceball();    
                 console.log("FIRE");
-
+                this.avaibleRice--;
+                this.riceCount.setText(this.avaibleRice + " x");
+                }    
+                
             }
         }    
         
@@ -152,15 +191,11 @@ class Scene2 extends Phaser.Scene{
             var riceball = this.physics.add.image(posX,this.player.y,"riceball");
             riceball.body.setAllowGravity(false);
             this.physics.world.enableBody(this);
-            
             riceball.setVelocity(800, 0);
-
-            this.physics.add.collider(riceball,this.enemies, function(riceball) {
+           
+            this.physics.add.overlap(riceball,this.wasabi, function(riceball) {
                 riceball.destroy();
-
                 console.log(riceball.velocityX);
-
-             
             });
         }
         
@@ -218,6 +253,12 @@ class Scene2 extends Phaser.Scene{
 
         }
 
+        ricebowlHit(player,ricebowl){
+            ricebowl.destroy();
+            console.log("Ricebowl aufgehoben");
+            this.avaibleRice = 10;
+            this.riceCount.setText(this.avaibleRice + " x");
+        }
             
 
         }

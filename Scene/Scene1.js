@@ -38,7 +38,8 @@ class Scene1 extends Phaser.Scene {
         // Player
         this.load.image("player","assets/spritesheets/game/oni.png");
 
-        // Riceball
+        // Rice-ball
+        this.load.image("ricebowl","assets/spritesheets/game/ricebowl.png");
         this.load.image("riceball","assets/spritesheets/game/riceball.png");
 
         // Girl
@@ -109,43 +110,43 @@ class Scene1 extends Phaser.Scene {
 
         //* Health UI 
         this.anims.create({
-          key: 'hp5_anim',
-          frames: [ { key: 'hp',frame:0 },{ key: 'hp',frame:1 },  ],
+          key: "hp5_anim",
+          frames: [ { key: "hp",frame:0 },{ key: "hp",frame:1 },  ],
           frameRate: 8,
           repeat: 0
         });
       
         this.anims.create({
-          key: 'hp4_anim',
-          frames: [ { key: 'hp',frame:1 },{ key: 'hp',frame:2 },  ],
+          key: "hp4_anim",
+          frames: [ { key: "hp",frame:1 },{ key: "hp",frame:2 },  ],
           frameRate: 8,
           repeat: 0
         });
 
         this.anims.create({
-          key: 'hp3_anim',
-          frames: [ { key: 'hp',frame:2 },{ key: 'hp',frame:3 }, ],
+          key: "hp3_anim",
+          frames: [ { key: "hp",frame:2 },{ key: "hp",frame:3 }, ],
           frameRate: 8,
           repeat: 0
         });
 
         this.anims.create({
-          key: 'hp2_anim',
-          frames: [ { key: 'hp',frame:3 },{ key: 'hp',frame:4 }, ],
+          key: "hp2_anim",
+          frames: [ { key: "hp",frame:3 },{ key: "hp",frame:4 }, ],
           frameRate: 8,
           repeat: 0
         });
 
         this.anims.create({
-          key: 'hp1_anim',
-          frames: [ { key: 'hp',frame:4 },{ key: 'hp',frame:5 },  ],
+          key: "hp1_anim",
+          frames: [ { key: "hp",frame:4 },{ key: "hp",frame:5 },  ],
           frameRate: 8,
           repeat: 0
           });
 
         this.anims.create({
-          key: 'hp0_anim',
-          frames: [ { key: 'hp',frame:5 },{ key: 'hp',frame:6 },  ],
+          key: "hp0_anim",
+          frames: [ { key: "hp",frame:5 },{ key: "hp",frame:6 },  ],
           frameRate: 8,
           repeat: 0
           });
