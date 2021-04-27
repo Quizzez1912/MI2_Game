@@ -165,8 +165,7 @@ class Scene2 extends Phaser.Scene{
         movePlayerManager(){
             if(this.cursorKeys.left.isDown && this.player.x > 0){
                 this.player.setVelocityX(-gameSettings.playerSpeed);
-                
-
+        
             } else if (this.cursorKeys.right.isDown && this.player.x < game.config.width * 3){
                 this.player.setVelocityX(gameSettings.playerSpeed);
                 
@@ -177,13 +176,14 @@ class Scene2 extends Phaser.Scene{
             // Jump
             if(this.cursorKeys.up.isDown && this.player.body.onFloor()){
                 this.player.setVelocityY(-gameSettings.playerSpeed);
-                console.log("jump");
+                
                 } 
                 
             
             if(this.player.y > 670){
                 console.log("FALL OF MAP");
                this.player.y = 660;
+               
             }    
             
             //* Player shoot Riceball
@@ -191,7 +191,7 @@ class Scene2 extends Phaser.Scene{
                 console.log("Vor dem Abschießen noch " + this.avaibleRice + " Reisbaelle übrig");
                 if(this.avaibleRice > 0){
                 this.shootRiceball();    
-                console.log("FIRE");
+                
                 this.avaibleRice--;
                 this.riceCount.setText(this.avaibleRice + " x");
                 }    
@@ -258,7 +258,6 @@ class Scene2 extends Phaser.Scene{
         //! Collider Functions
         wasabiHit(player,wasabi){
             wasabi.destroy();
-            console.log(this.hpValue);
             this.hpValue--;
             this.controlHp(this.hpValue);
 
