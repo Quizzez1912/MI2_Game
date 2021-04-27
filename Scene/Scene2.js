@@ -22,11 +22,11 @@ class Scene2 extends Phaser.Scene{
         this.hp.setScrollFactor(0);
 
         //* Ricebar
-        this.avaibleRice = 100;
-        this.riceballs = this.add.image( 450, 10,"ricebowl").setScale(2);
-        this.riceballs.setOrigin(0,0);
-        this.riceballs.setDepth(10);
-        this.riceballs.setScrollFactor(0);
+        this.avaibleRice = 0;
+        this.ricebowls = this.add.image( 450, 10,"ricebowl").setScale(2);
+        this.ricebowls.setOrigin(0,0);
+        this.ricebowls.setDepth(10);
+        this.ricebowls.setScrollFactor(0);
         this.riceCount = this.add.text(300,10, "0" + " x",{
             font: "65px Arial",
             fill: "#ff0044",
@@ -67,6 +67,7 @@ class Scene2 extends Phaser.Scene{
         this.spacebar =  this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.player = this.physics.add.image(100 , 718-100,"player");
     
+
         //!PickUP
         this.ricebowl = this.physics.add.group({
             key: "ricebowl",
@@ -80,7 +81,15 @@ class Scene2 extends Phaser.Scene{
         });
 
 
-        //! Enemies
+        //! Groups
+        //* Riceballs
+        this.riceballs = this.physics.add.group({
+            allowGravity: false,
+            velocityX : 400,
+            velocityY : 10
+        });
+        
+        
         //* Wasabi Group
        
         this.wasabi = this.physics.add.group({
@@ -100,10 +109,16 @@ class Scene2 extends Phaser.Scene{
         //* Boy
        
         //! Collider
-
+        //* Player
         this.physics.add.collider(this.player, this.ground);
         this.physics.add.overlap(this.player,this.wasabi,this.wasabiHit,null , this);
         this.physics.add.overlap(this.player,this.ricebowl,this.ricebowlHit,null , this);
+
+        //* Riceballs
+        this.physics.add.collider(this.ground, this.riceballs,this.riceballHitGround,null,this);
+        this.physics.add.overlap(this.wasabi, this.riceballs,this.riceballHitGround,null,this);
+    
+
         
 
         //! Main Camera
@@ -133,7 +148,7 @@ class Scene2 extends Phaser.Scene{
        this.timeCount.setText((this.time/60).toFixed(2));
     */
         this.movePlayerManager();
-        this.shootPlayerManager()
+        
 
         // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes
         this.sky.tilePositionX = this.myCam.scrollX * .3;
@@ -170,10 +185,8 @@ class Scene2 extends Phaser.Scene{
                 console.log("FALL OF MAP");
                this.player.y = 660;
             }    
-            }
-
-        //* Player shoot    
-        shootPlayerManager(){
+            
+            //* Player shoot Riceball
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
                 console.log("Vor dem Abschießen noch " + this.avaibleRice + " Reisbaelle übrig");
                 if(this.avaibleRice > 0){
@@ -182,21 +195,19 @@ class Scene2 extends Phaser.Scene{
                 this.avaibleRice--;
                 this.riceCount.setText(this.avaibleRice + " x");
                 }    
-                
+
+
+                for(var i = 0; i < this.riceballs.getChildren().length; i++){
+                    this.riceball = this.riceballs.getChildren()[i];
+                    this.riceball.update();
+                  }    
+
             }
-        }    
+        }
+          
         
         shootRiceball(){
-            var posX = this.player.x + 32;
-            var riceball = this.physics.add.image(posX,this.player.y,"riceball");
-            riceball.body.setAllowGravity(false);
-            this.physics.world.enableBody(this);
-            riceball.setVelocity(800, 0);
-           
-            this.physics.add.overlap(riceball,this.wasabi, function(riceball) {
-                riceball.destroy();
-                console.log(riceball.velocityX);
-            });
+            var riceball = new Riceball(this);
         }
         
         controlHp(hpValue){
@@ -259,7 +270,10 @@ class Scene2 extends Phaser.Scene{
             this.avaibleRice = 10;
             this.riceCount.setText(this.avaibleRice + " x");
         }
-            
+        
+        riceballHitGround(ground,riceball){
+            riceball.destroy();
+        }
 
         }
         
