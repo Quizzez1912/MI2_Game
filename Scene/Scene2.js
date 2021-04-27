@@ -21,18 +21,19 @@ class Scene2 extends Phaser.Scene{
         this.hp.setDepth(10);
         this.hp.setScrollFactor(0);
 
-        //* Ricebar
+        //TODO Wenn avaibleRiceball = 0 das Reisbowl Symbol durchstreichen und keinen Text setzen nur Symbol
+        //* Ricebar 
         this.avaibleRice = 0;
-        this.ricebowls = this.add.image( 450, 10,"ricebowl").setScale(2);
+        this.ricebowls = this.add.image(config.width-70, 100,"ricebowl").setScale(2);
         this.ricebowls.setOrigin(0,0);
         this.ricebowls.setDepth(10);
         this.ricebowls.setScrollFactor(0);
-        this.riceCount = this.add.text(300,10, "0" + " x",{
+        this.riceCount = this.add.text(config.width - 100 ,100, "0" + " x",{
             font: "65px Arial",
             fill: "#ff0044",
                 
         });
-        this.riceCount.setOrigin(0,0);
+        this.riceCount.setOrigin(1,0);
         this.riceCount.setScrollFactor(0);
         this.riceCount.setDepth(10);
 
@@ -129,8 +130,9 @@ class Scene2 extends Phaser.Scene{
         this.myCam.startFollow(this.player);
         
         //! TIMER
+        this.minutes = 0;
         this.time = 0;
-        this.timeCount = this.add.text(20,20, "0",{
+        this.timeCount = this.add.text(20,10, "0",{
             font: "65px Arial",
             fill: "#ff0044",
                 
@@ -143,10 +145,10 @@ class Scene2 extends Phaser.Scene{
     
     //! Update 
     update() {
-      /* //TODO für TEST ERSTMAL AUS
-        this.time++;
-       this.timeCount.setText((this.time/60).toFixed(2));
-    */
+       //TODO für TEST ERSTMAL AUS
+        
+        
+        this.timeManager();
         this.movePlayerManager();
         
 
@@ -158,7 +160,28 @@ class Scene2 extends Phaser.Scene{
 
         
     }
-    
+    //! Time
+
+    timeManager(){
+       
+        this.time++;
+
+        if (this.time/60 > 60){
+            this.minutes++;
+            this.time = 0;
+        }
+        if(this.minutes < 10){
+            this.minutesString = "0" + this.minutes.toString();
+        } else {
+            this.minutesString = this.minutes;    
+        }
+
+        this.timeCount.setText(this.minutesString + "." + (this.time/60).toFixed(2));   
+        
+        
+    }
+
+
         //! Player Functions
 
        //* Playermovement
