@@ -58,9 +58,12 @@ class Scene2 extends Phaser.Scene{
             child.x = Phaser.Math.Between(500, 3000);
             child.y = 668;
             child.setImmovable(true);
-
-
         });
+
+        //* Girl
+
+
+        //* Boy
        
         //! Collider
 
@@ -82,9 +85,7 @@ class Scene2 extends Phaser.Scene{
         
         this.movePlayerManager();
         this.shootPlayerManager()
-          
-       // console.log(this.player.y);
-        
+
         // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes
         this.sky.tilePositionX = this.myCam.scrollX * .3;
         this.tree.tilePositionX = this.myCam.scrollX * .6;
@@ -93,7 +94,9 @@ class Scene2 extends Phaser.Scene{
 
         
     }
+        //! Player Functions
 
+       //* Playermovement
         movePlayerManager(){
             if(this.cursorKeys.left.isDown && this.player.x > 0){
                 this.player.setVelocityX(-gameSettings.playerSpeed);
@@ -115,6 +118,7 @@ class Scene2 extends Phaser.Scene{
             
             }
 
+        //* Player shoot    
         shootPlayerManager(){
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
                 this.shootRiceball();    
@@ -123,8 +127,6 @@ class Scene2 extends Phaser.Scene{
             }
         }    
         
-        
-
         shootRiceball(){
             var posX = this.player.x + 32;
             var riceball = this.physics.add.image(posX,this.player.y,"riceball");
@@ -141,8 +143,53 @@ class Scene2 extends Phaser.Scene{
              
             });
         }
-    
         
+        controlHp(hpValue){
+        
+            switch(hpValue){
+                // 2.5 Herzen
+                case 5 :
+                console.log("DEINE LEBEN === " + hpValue);
+                this.hp.play("hp5_anim");
+                break;
+                
+                // 2 Herzen
+                case 4 :
+                console.log("DEINE LEBEN === " + hpValue);
+                this.hp.play("hp4_anim");
+                break;
+                
+                // 1.5 Herzen
+                case 3 :
+                console.log("DEINE LEBEN === " + hpValue);
+                this.hp.play("hp3_anim");
+                break;
+                
+                // 1 Herz
+                case 2 :
+                console.log("DEINE LEBEN === " + hpValue);
+                this.hp.play("hp2_anim");
+                break;
+                
+                // 0.5 Herzen
+                case 1 :
+                console.log("DEINE LEBEN === " + hpValue);   
+                this.hp.play("hp1_anim");
+                break;
+                
+                // 0 Herzen
+                case 0 :
+                console.log("DEINE LEBEN === " + hpValue);    
+                this.hp.play("hp0_anim");
+                console.log("******TOT********");
+                break;
+                
+                
+    
+            }   
+        } 
+        
+        //! Collider Functions
         wasabiHit(player,wasabi){
             wasabi.destroy();
             console.log(this.hpValue);
@@ -150,56 +197,12 @@ class Scene2 extends Phaser.Scene{
             this.controlHp(this.hpValue);
 
         }
-        
-        controlHp(hpValue){
-        
-        switch(hpValue){
-            // 2.5 Herzen
-            case 5 :
-            console.log("DEINE LEBEN === " + hpValue);
-            this.hp.play("hp5_anim");
-            break;
-            
-            // 2 Herzen
-            case 4 :
-            console.log("DEINE LEBEN === " + hpValue);
-            this.hp.play("hp4_anim");
-            break;
-            
-            // 1.5 Herzen
-            case 3 :
-            console.log("DEINE LEBEN === " + hpValue);
-            this.hp.play("hp3_anim");
-            break;
-            
-            // 1 Herz
-            case 2 :
-            console.log("DEINE LEBEN === " + hpValue);
-            this.hp.play("hp2_anim");
-            break;
-            
-            // 0.5 Herzen
-            case 1 :
-            console.log("DEINE LEBEN === " + hpValue);   
-            this.hp.play("hp1_anim");
-            break;
-            
-            // 0 Herzen
-            case 0 :
-            console.log("DEINE LEBEN === " + hpValue);    
-            this.hp.play("hp0_anim");
-            console.log("******TOT********");
-            break;
-            
-            
 
-        }    
-            
             
 
         }
         
-        }
+        
         
   
        
