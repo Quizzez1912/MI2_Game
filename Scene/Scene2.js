@@ -5,11 +5,14 @@ class Scene2 extends Phaser.Scene{
     }
 
     preload(){
-
+        
     }
     
     create() {
+        
+
         this.add.text(20,20, "Main Game");   
+        
         //! UI Create
         this.hpValue = 6;
         this.hp = this.add.sprite(config.width-200, 10,"hp");
@@ -68,7 +71,7 @@ class Scene2 extends Phaser.Scene{
         //! Collider
 
         this.physics.add.collider(this.player, this.ground);
-        this.physics.add.collider(this.player,this.wasabi,this.wasabiHit,null , this)
+        this.physics.add.overlap(this.player,this.wasabi,this.wasabiHit,null , this)
 
         //! Main Camera
         this.myCam = this.cameras.main;
@@ -77,12 +80,24 @@ class Scene2 extends Phaser.Scene{
         // Camera verfolgt den Spieler
         this.myCam.startFollow(this.player);
         
+        //! TIMER
+        this.time = 0;
+        this.timeCount = this.add.text(20,20, "0",{
+            font: "65px Arial",
+            fill: "#ff0044",
+                
+        });
+        this.timeCount.setOrigin(0,0);
+        this.timeCount.setScrollFactor(0);
+
 
     }
     
     //! Update 
     update() {
-        
+       this.time++;
+       this.timeCount.setText((this.time/60).toFixed(2));
+
         this.movePlayerManager();
         this.shootPlayerManager()
 
@@ -94,6 +109,7 @@ class Scene2 extends Phaser.Scene{
 
         
     }
+    
         //! Player Functions
 
        //* Playermovement
