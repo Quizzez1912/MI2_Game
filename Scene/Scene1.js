@@ -17,9 +17,9 @@ class Scene1 extends Phaser.Scene {
         
         this.load.image("sushimaster","assets/spritesheets/pregame/sushimasterLogo.png")
         
-        this.load.spritesheet("playButton", "assets/spritesheets/pregame/playButton.png",{
-            frameWidth: 138,
-            frameHeight: 74
+        this.load.spritesheet("playButton", "assets/spritesheets/pregame/play.png",{
+            frameWidth: 500,
+            frameHeight: 300
           });
 
         this.load.spritesheet("music", "assets/spritesheets/pregame/music.png",{
@@ -29,14 +29,23 @@ class Scene1 extends Phaser.Scene {
         
 
         //! Preload für das Game
-        
-        this.load.image("game_bg","assets/game_bg.png");
+          
+        // Paralax Tests
+
+       
+        this.load.image("sky", "assets/sky.png");
+        this.load.image("tree", "assets/tree.png");
+        this.load.image("ground", "assets/ground.png");
+       
+        this.load.image("wasabi","assets/spritesheets/game/wasabi.png");
+       
+       
+       
         this.load.image("player","assets/spritesheets/game/oni.png");
 
-        this.load.spritesheet("heart", "assets/spritesheets/UI/heart.png", {
-            frameWidth: 64,
-            frameHeigth: 64
-        });
+        this.load.atlas("hp", "assets/spritesheets/UI/hp.png","assets/spritesheets/UI/hp.json");
+
+
 
         this.load.audio("music","sounds/sci-fi_platformer12.mp3");
 
@@ -51,7 +60,95 @@ class Scene1 extends Phaser.Scene {
     }
     
     create() {
-        var allowMusic = true; 
+        //!UI HEART ANIMS
+        this.anims.create({
+          key: 'hp5_anim',
+          frames: [
+              { key: 'hp',frame:0 },
+              { key: 'hp',frame:1 },
+          ],
+          frameRate: 8,
+          repeat: 0
+        });
+      
+        this.anims.create({
+          key: 'hp4_anim',
+          frames: [
+              { key: 'hp',frame:1 },
+              { key: 'hp',frame:2 },
+          ],
+          frameRate: 8,
+          repeat: 0
+        });
+
+        this.anims.create({
+          key: 'hp3_anim',
+          frames: [
+              { key: 'hp',frame:2 },
+              { key: 'hp',frame:3 },
+          ],
+          frameRate: 8,
+          repeat: 0
+      });
+
+        this.anims.create({
+          key: 'hp2_anim',
+          frames: [
+              { key: 'hp',frame:3 },
+              { key: 'hp',frame:4 },
+          ],
+          frameRate: 8,
+          repeat: 0
+      });
+
+      this.anims.create({
+        key: 'hp1_anim',
+        frames: [
+            { key: 'hp',frame:4 },
+            { key: 'hp',frame:5 },
+        ],
+        frameRate: 8,
+        repeat: 0
+      });
+
+      this.anims.create({
+        key: 'hp0_anim',
+        frames: [
+            { key: 'hp',frame:5 },
+            { key: 'hp',frame:6 },
+        ],
+        frameRate: 8,
+        repeat: 0
+      });
+      this.anims.create({
+        key: 'hp0_anim',
+        frames: [
+            { key: 'hp',frame:6 },
+            { key: 'hp',frame:6 },
+        ],
+        frameRate: 8,
+        repeat: 0
+      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      
+      var allowMusic = true; 
         // Preload StartScene
         this.background = this.add.image(0,0,"background");
         this.background.setOrigin(0,0);     
@@ -63,7 +160,7 @@ class Scene1 extends Phaser.Scene {
         
        
         //! Music Button
-         this.music = this.sound.add("music");
+        //TODO this.music = this.sound.add("music");
 
          var musicConfig = {
              mute : false,
@@ -117,18 +214,19 @@ class Scene1 extends Phaser.Scene {
 
         });
 
+        //! 
         this.sushimaster = this.add.image(config.width / 2 , config.height /2 - 200,"sushimaster");
         
         this.anims.create({
             key: "playButton_anim",
             frames: this.anims.generateFrameNumbers("playButton"),
-            frameRate: 20,
+            frameRate: 5,
             repeat: -1
           });
 
        
        
-        this.playButton = this.add.sprite(config.width /2 ,config.height / 2, "playButton").setScale(2.5);
+        this.playButton = this.add.sprite(config.width /2 ,config.height / 2, "playButton");
         this.playButton.play("playButton_anim");
         
         
@@ -143,17 +241,16 @@ class Scene1 extends Phaser.Scene {
         });
 
         
-        
-        
        
-       //this.music.play(musicConfig);
+      //! this.music.play(musicConfig);
 
 
         this.add.text(20,20, "Pre Game");
         //this.scene.start("playGame");
         
-        //! TEST KOMMT DANN IN SCENE2
-
+        //! ANIMS für Scene2
+        /*
+        // Herzen von ganz zu halb
         this.anims.create({
             key: "heart_anim",
             frames: this.anims.generateFrameNumbers("heart", {
@@ -164,6 +261,7 @@ class Scene1 extends Phaser.Scene {
             repeat: -1
           });
 
+          // Herzen von halb auf 0
           this.anims.create({
             key: "hearthalf_anim",
             frames: this.anims.generateFrameNumbers("heart", {
@@ -174,27 +272,21 @@ class Scene1 extends Phaser.Scene {
             repeat: -1
           });
 
-          this.anims.create({
-            key: "heartfull_anim",
-            frames: this.anims.generateFrameNumbers("heart", {
-                start: 0,
-                end: 6,
-            }),
-            frameRate: 4,
-            repeat: -1
-          });
+         // Herzen von ganz auf 0
 
-       
-
-        this.heart = this.add.sprite(config.width /2 ,config.height / 2 + 150 , "heart");
-        this.heart.play("heart_anim");
+         this.anims.create({
+          key: "heartfull_anim",
+          frames: this.anims.generateFrameNumbers("heart", {
+              start: 0,
+              end: 6,
+          }),
+          frameRate: 4,
+          repeat: 0
+        });
+*/
 
         
-        this.heart = this.add.sprite(config.width /2 ,config.height / 2 + 300 , "heart");
-        this.heart.play("hearthalf_anim");
 
-        this.heart = this.add.sprite(config.width /2 ,config.height / 2 + 250 , "heart");
-        this.heart.play("heartfull_anim");
 
         //! TEST ENDE
           
@@ -204,8 +296,8 @@ class Scene1 extends Phaser.Scene {
     }
 
     update(){
-          
-    }
+        
 
     
+}
 }
