@@ -67,6 +67,8 @@ class Scene2 extends Phaser.Scene{
        
         //! World Physics
         this.physics.world.gravity.y = 400;
+        this.physics.world.bounds.width = this.ground.width;
+       
        
         //! Player + Input
         this.cursorKeys = this.input.keyboard.createCursorKeys();
@@ -151,8 +153,7 @@ class Scene2 extends Phaser.Scene{
     //! Update 
     update() {
        //TODO für TEST ERSTMAL AUS
-        
-        
+       // console.log(this.player.x);
         this.timeManager();
         this.movePlayerManager();
         
@@ -192,10 +193,10 @@ class Scene2 extends Phaser.Scene{
 
        //* Playermovement
         movePlayerManager(){
-            if(this.cursorKeys.left.isDown && this.player.x > 0){
+            if(this.cursorKeys.left.isDown && this.player.x > 35){
                 this.player.setVelocityX(-gameSettings.playerSpeed);
         
-            } else if (this.cursorKeys.right.isDown && this.player.x < game.config.width * 3){
+            } else if (this.cursorKeys.right.isDown && this.player.x < game.config.width * 3 - 35){
                 this.player.setVelocityX(gameSettings.playerSpeed);
                 
 
@@ -208,12 +209,12 @@ class Scene2 extends Phaser.Scene{
                 
                 } 
                 
-            
-            if(this.player.y > 670){
+             //? Check ob der Bug noch auftritt
+            /*if(this.player.y > 670){
                 console.log("FALL OF MAP");
                this.player.y = 660;
                
-            }    
+            }    */
             
             //* Player shoot Riceball
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
