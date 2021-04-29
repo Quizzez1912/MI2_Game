@@ -186,10 +186,10 @@ class Scene2 extends Phaser.Scene{
 
        //* Playermovement
         movePlayerManager(){
-            if(this.cursorKeys.left.isDown && this.player.x > 35){
+            if(this.cursorKeys.left.isDown && this.player.x > 60){
                 this.player.setVelocityX(-gameSettings.playerSpeed);
         
-            } else if (this.cursorKeys.right.isDown && this.player.x < game.config.width * 3 - 35){
+            } else if (this.cursorKeys.right.isDown && this.player.x < game.config.width * 3 - 60){
                 this.player.setVelocityX(gameSettings.playerSpeed);
                 
 
@@ -306,18 +306,13 @@ class Scene2 extends Phaser.Scene{
         
         
         randomEnemy(){
+        
+           
             this.wasabiSpawntime++;
             
             if(this.wasabiSpawntime/60 > 5){
-                var spawn = Phaser.Math.Between(1,10);
-                this.wasabi = 0;
-                if(spawn > 7){
-                    this.spawnWasabi();
-                } else
-
-                console.log("Glück gehabt kein Wasabi Spawn")
-
                 this.wasabiSpawntime = 0;
+                this.spawnWasabi();
             }
 
         }
