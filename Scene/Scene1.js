@@ -68,7 +68,7 @@ class Scene1 extends Phaser.Scene {
       this.add.text(20,20, "Pre Game");
 
       //! MusicButton
-     //? ÄNDERN  this.MusicButton = this.add.sprite(config.width - 100 ,config.height /2 - 300 , "music");
+      this.MusicButton = this.add.sprite(config.width - 100 ,config.height /2 - 300 , "music");
      //? ÄNDERN  this.music = this.sound.add("music");
       var allowMusic = true; 
 
@@ -196,13 +196,13 @@ class Scene1 extends Phaser.Scene {
         this.playButton.setInteractive({cursor : "pointer"});     // Cursor Symbol ändern
         this.playButton.on("pointerdown", ()=> {
               this.scene.start("playGame");
-              allowMusic = false;
+              //allowMusic = false;
 
         });
         
         //! START SCENE2 SOFORT FÜR TESTZWECK
 
-        this.scene.start("playGame");
+        //this.scene.start("playGame");
     }
 
     update(){

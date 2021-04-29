@@ -9,9 +9,9 @@ class Riceball extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
 
-        this.body.setVelocityX(800);
+       //* Gruppe riceballs
         scene.riceballs.add(this);
-        
+
 
 
     }

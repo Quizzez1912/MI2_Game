@@ -8,10 +8,7 @@ class Scene2 extends Phaser.Scene{
         
     }
     
-    create() {
-        
-
-        this.add.text(20,20, "Main Game");   
+    create() { 
         
         //! UI Create
         //* Healthbar
@@ -55,7 +52,7 @@ class Scene2 extends Phaser.Scene{
         this.tree = this.add.tileSprite(0, 0, game.config.width,game.config.height, "tree");
         this.tree.setOrigin(0, 1);
         this.tree.setScrollFactor(0);
-        this.tree.y= game.config.height - 100;
+        this.tree.y= game.config.height - 50;
 
         // Ground Layer mit Höhe von 50px
         this.ground = this.add.tileSprite(0, 1, game.config.width*3,50,"ground");
@@ -77,6 +74,7 @@ class Scene2 extends Phaser.Scene{
     
 
         //!PickUP
+
         this.ricebowl = this.physics.add.group({
             key: "ricebowl",
             repeat : 0,
@@ -221,16 +219,16 @@ class Scene2 extends Phaser.Scene{
                 console.log("Vor dem Abschießen noch " + this.avaibleRice + " Reisbaelle übrig");
                 if(this.avaibleRice > 0){
                 this.shootRiceball();    
-                
                 this.avaibleRice--;
                 this.riceCount.setText(this.avaibleRice + " x");
+
                 }    
 
 
-                for(var i = 0; i < this.riceballs.getChildren().length; i++){
+                /*for(var i = 0; i < this.riceballs.getChildren().length; i++){
                     this.riceball = this.riceballs.getChildren()[i];
                     this.riceball.update();
-                  }    
+                  }  */  
 
             }
         }
@@ -239,6 +237,8 @@ class Scene2 extends Phaser.Scene{
         shootRiceball(){
             var riceball = new Riceball(this);
         }
+
+        
         
         controlHp(hpValue){
         
@@ -296,7 +296,7 @@ class Scene2 extends Phaser.Scene{
         ricebowlHit(player,ricebowl){
             ricebowl.destroy();
             console.log("Ricebowl aufgehoben");
-            this.avaibleRice = 10;
+            this.avaibleRice += 10;
             this.riceCount.setText(this.avaibleRice + " x");
         }
         
