@@ -25,9 +25,9 @@ class Scene2 extends Phaser.Scene{
         this.ricebowls.setOrigin(0,0);
         this.ricebowls.setDepth(10);
         this.ricebowls.setScrollFactor(0);
-        this.riceCount = this.add.text(config.width - 100 ,100, "0" + " x",{
+        this.riceCount = this.add.text(config.width - 75 ,100, "0",{
             font: "65px Arial",
-            fill: "#ff0044",
+            fill: "#000000",
                 
         });
         this.riceCount.setOrigin(1,0);
@@ -97,17 +97,8 @@ class Scene2 extends Phaser.Scene{
         
         
         //* Wasabi Group
-       
-        this.wasabi = this.physics.add.group({
-            key: "wasabi",
-            repeat: 6,
-        });
-        this.wasabi.children.iterate(child => {
-            this.physics.add.collider(child, this.ground);
-            child.x = Phaser.Math.Between(500, 3000);
-            child.y = 668;
-            child.setImmovable(true);
-        });
+        this.wasabiGroup = this.physics.add.group();
+        this.wasabiSpawntime = 0;
 
         //* Girl
 
@@ -117,12 +108,16 @@ class Scene2 extends Phaser.Scene{
         //! Collider
         //* Player
         this.physics.add.collider(this.player, this.ground);
-        this.physics.add.overlap(this.player,this.wasabi,this.wasabiHit,null , this);
+        this.physics.add.overlap(this.player,this.wasabiGroup,this.wasabiHit,null , this);
         this.physics.add.overlap(this.player,this.ricebowl,this.ricebowlHit,null , this);
+
 
         //* Riceballs
         this.physics.add.collider(this.ground, this.riceballs,this.riceballHitGround,null,this);
-        this.physics.add.overlap(this.wasabi, this.riceballs,this.riceballHitGround,null,this);
+        this.physics.add.overlap(this.wasabiGroup, this.riceballs,this.riceballHitGround,null,this);
+
+        //* Wasabi
+        this.physics.add.collider(this.wasabiGroup, this.ground);
     
 
         
@@ -139,7 +134,7 @@ class Scene2 extends Phaser.Scene{
         this.time = 0;
         this.timeCount = this.add.text(20,10, "0",{
             font: "65px Arial",
-            fill: "#ff0044",
+            fill: "#000000",
                 
         });
         this.timeCount.setOrigin(0,0);
@@ -155,7 +150,7 @@ class Scene2 extends Phaser.Scene{
         this.timeManager();
         this.movePlayerManager();
         
-
+        this.randomEnemy();
         // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes
         this.sky.tilePositionX = this.myCam.scrollX * .2;
         this.mountain.tilePositionX = this.myCam.scrollX * .4;
@@ -220,7 +215,7 @@ class Scene2 extends Phaser.Scene{
                 if(this.avaibleRice > 0){
                 this.shootRiceball();    
                 this.avaibleRice--;
-                this.riceCount.setText(this.avaibleRice + " x");
+                this.riceCount.setText(this.avaibleRice);
 
                 }    
 
@@ -284,7 +279,7 @@ class Scene2 extends Phaser.Scene{
     
             }   
         } 
-        
+    
         //! Collider Functions
         wasabiHit(player,wasabi){
             wasabi.destroy();
@@ -297,16 +292,37 @@ class Scene2 extends Phaser.Scene{
             ricebowl.destroy();
             console.log("Ricebowl aufgehoben");
             this.avaibleRice += 10;
-            this.riceCount.setText(this.avaibleRice + " x");
+            this.riceCount.setText(this.avaibleRice);
         }
         
         riceballHitGround(ground,riceball){
             riceball.destroy();
         }
 
+        spawnWasabi(){
+            var newWasabi = new Wasabi(this);   
+            console.log("SPAWNED WASABI");
         }
         
         
+        randomEnemy(){
+            this.wasabiSpawntime++;
+            
+            if(this.wasabiSpawntime/60 > 5){
+                var spawn = Phaser.Math.Between(1,10);
+                this.wasabi = 0;
+                if(spawn > 7){
+                    this.spawnWasabi();
+                } else
+
+                console.log("Glück gehabt kein Wasabi Spawn")
+
+                this.wasabiSpawntime = 0;
+            }
+
+        }
+        
+}
         
   
        

@@ -41,7 +41,7 @@ class Scene1 extends Phaser.Scene {
 
         // Rice-ball
         this.load.image("ricebowl","assets/spritesheets/game/ricebowl.png");
-        this.load.image("riceball","assets/spritesheets/game/riceball.png");
+        this.load.image("riceball","assets/spritesheets/game/riceball_oni.png");
 
         // Girl
         this.load.image("girl","assets/spritesheets/game/girl.png");
@@ -112,42 +112,42 @@ class Scene1 extends Phaser.Scene {
         //* Health UI 
         this.anims.create({
           key: "hp5_anim",
-          frames: [ { key: "hp",frame:0 },{ key: "hp",frame:1 },  ],
+          frames: [ { key: "hp",frame:1 },  ],
           frameRate: 8,
           repeat: 0
         });
       
         this.anims.create({
           key: "hp4_anim",
-          frames: [ { key: "hp",frame:1 },{ key: "hp",frame:2 },  ],
+          frames: [ { key: "hp",frame:2 },],
           frameRate: 8,
           repeat: 0
         });
 
         this.anims.create({
           key: "hp3_anim",
-          frames: [ { key: "hp",frame:2 },{ key: "hp",frame:3 }, ],
+          frames: [ { key: "hp",frame:3 },],
           frameRate: 8,
           repeat: 0
         });
 
         this.anims.create({
           key: "hp2_anim",
-          frames: [ { key: "hp",frame:3 },{ key: "hp",frame:4 }, ],
+          frames: [ { key: "hp",frame:4 },],
           frameRate: 8,
           repeat: 0
         });
 
         this.anims.create({
           key: "hp1_anim",
-          frames: [ { key: "hp",frame:4 },{ key: "hp",frame:5 },  ],
+          frames: [ { key: "hp",frame:5 },],
           frameRate: 8,
           repeat: 0
           });
 
         this.anims.create({
           key: "hp0_anim",
-          frames: [ { key: "hp",frame:5 },{ key: "hp",frame:6 },  ],
+          frames: [ { key: "hp",frame:6 },],
           frameRate: 8,
           repeat: 0
           });
@@ -202,7 +202,7 @@ class Scene1 extends Phaser.Scene {
         
         //! START SCENE2 SOFORT FÜR TESTZWECK
 
-        //this.scene.start("playGame");
+       // this.scene.start("playGame");
     }
 
     update(){
