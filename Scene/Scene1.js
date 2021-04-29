@@ -37,7 +37,7 @@ class Scene1 extends Phaser.Scene {
 
         //* Object Spritesheets & Atlas
         // Player
-        this.load.image("player","assets/spritesheets/game/oni.png");
+        this.load.image("player","assets/spritesheets/game/oni1.png");
 
         // Rice-ball
         this.load.image("ricebowl","assets/spritesheets/game/ricebowl.png");
@@ -60,7 +60,7 @@ class Scene1 extends Phaser.Scene {
 
         //* Music und Soundeffekte
         // Hintergrundmusik
-        this.load.audio("music","sounds/sci-fi_platformer12.mp3");
+        //? ÄNDERN this.load.audio("music","sounds/sci-fi_platformer12.mp3");
        
     }
     
@@ -68,8 +68,8 @@ class Scene1 extends Phaser.Scene {
       this.add.text(20,20, "Pre Game");
 
       //! MusicButton
-      this.MusicButton = this.add.sprite(config.width - 100 ,config.height /2 - 300 , "music");
-      this.music = this.sound.add("music");
+     //? ÄNDERN  this.MusicButton = this.add.sprite(config.width - 100 ,config.height /2 - 300 , "music");
+     //? ÄNDERN  this.music = this.sound.add("music");
       var allowMusic = true; 
 
        var musicConfig = {

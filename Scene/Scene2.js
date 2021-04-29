@@ -213,7 +213,7 @@ class Scene2 extends Phaser.Scene{
             /*if(this.player.y > 670){
                 console.log("FALL OF MAP");
                this.player.y = 660;
-               
+            
             }    */
             
             //* Player shoot Riceball
