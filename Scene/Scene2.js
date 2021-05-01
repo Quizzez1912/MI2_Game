@@ -99,12 +99,17 @@ class Scene2 extends Phaser.Scene{
         //* Wasabi Group
         this.wasabiGroup = this.physics.add.group();
         this.wasabiSpawntime = 0;
-
-        //* Girl
-
-
-        //* Boy
        
+       
+        //! Enemies
+        //* Girl
+        this.physics.add.collider(this.girl, this.ground);
+        this.girlSpawntime = 0;
+        
+        //* Boy
+        this.physics.add.collider(this.boy, this.ground);
+        this.boySpawntime = 0;
+        
         //! Collider
         //* Player
         this.physics.add.collider(this.player, this.ground);
@@ -119,8 +124,13 @@ class Scene2 extends Phaser.Scene{
         //* Wasabi
         this.physics.add.collider(this.wasabiGroup, this.ground);
     
-
-        
+        //* Chopsticks
+        this.physics.add.collider(this.ground, this.chopsticks,this.chopstickHitGround,null,this);
+        this.physics.add.overlap(this.wasabiGroup, this.chopsticks,this.chopstickHitGround,null,this);
+       
+        //* Soyfish
+        this.physics.add.collider(this.ground, this.soyfish,this.soyfishHitGround,null,this);
+        this.physics.add.overlap(this.wasabiGroup, this.soyfishs,this.soyfishHitGround,null,this);
 
         //! Main Camera
         this.myCam = this.cameras.main;
