@@ -52,10 +52,10 @@ class Scene1 extends Phaser.Scene {
         // Wasabi
         this.load.image("wasabi","assets/spritesheets/game/wasabi.png");
 
-        //Soyfish
+        // Soyfish
         this.load.image("soyfish","assets/spritesheets/game/soyfish.png");
 
-        //Chopstick
+        // Chopstick
         this.load.image("chopstick","assets/spritesheets/game/chopstick.png");
 
         //* UI Elemente
