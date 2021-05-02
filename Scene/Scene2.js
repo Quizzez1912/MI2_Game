@@ -41,8 +41,8 @@ class Scene2 extends Phaser.Scene{
         this.boy.setScrollFactor(0);
 
         //* Girl
-        this.girl = this.add.image(config.width-70, 100,"girl").setScale(2);
-        this.girl.setOrigin(0,0);
+        this.girl = this.physics.add.image(config.width-70, 100,"girl").setScale(2);
+        this.girl.setOrigin(1,0);
         this.girl.setDepth(10);
         this.girl.setScrollFactor(0);
 
