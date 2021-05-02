@@ -261,8 +261,7 @@ class Scene2 extends Phaser.Scene{
         
     }
 
-
-        //! Player Functions
+       //#region  //! Player Functions & Eventmanager
 
        //* Playermovement
         movePlayerManager(){
@@ -331,7 +330,7 @@ class Scene2 extends Phaser.Scene{
             }
 
         }
-
+        //#endregion
 
         controlHp(hpValue){
         
@@ -406,6 +405,9 @@ class Scene2 extends Phaser.Scene{
         //#endregion
         
         
+        //#region //! Spawn Enemy & Powerups    
+
+
         spawnWasabi(){
             var newWasabi = new Wasabi(this);   
             console.log("SPAWNED WASABI");
@@ -422,7 +424,10 @@ class Scene2 extends Phaser.Scene{
 
         }
 
+        //#endregion
 
+        
+        
         takePwrJumpBoost(player,jumpBoost){
             jumpBoost.destroy();
             this.jumpBoost = true;
@@ -432,6 +437,7 @@ class Scene2 extends Phaser.Scene{
 
         takePwrShield(player,shield){
             shield.destroy();
+
 
         }
         
