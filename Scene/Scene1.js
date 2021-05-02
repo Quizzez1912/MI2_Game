@@ -47,7 +47,7 @@ class Scene1 extends Phaser.Scene {
         this.load.image("girl","assets/spritesheets/game/girl.png");
 
         // Boy
-        this.load.image("boys","assets/spritesheets/game/boy.png");
+        this.load.image("boy","assets/spritesheets/game/boy.png");
 
         // Wasabi
         this.load.image("wasabi","assets/spritesheets/game/wasabi.png");

@@ -35,20 +35,16 @@ class Scene2 extends Phaser.Scene{
         this.riceCount.setDepth(10);
         
         //* Boy
-
-
-
-        this.boy = this.add.image(config.width-70, 100,"boy").setScale(2);
+        this.boy = this.physics.add.image(config.width-70, 100,"boy").setScale(2);
         this.boy.setOrigin(0,0);
         this.boy.setDepth(10);
-        this.boy.setScrollFactor(0);
+    
 
         //* Girl
         this.girl = this.physics.add.image(config.width-70, 100,"girl").setScale(2);
         this.girl.setOrigin(1,0);
         this.girl.setDepth(10);
-        this.girl.setScrollFactor(0);
-
+        
 
         //! Background Create
         // Add SKY layer               
@@ -118,11 +114,11 @@ class Scene2 extends Phaser.Scene{
         //* Girl
         this.physics.add.collider(this.girl, this.ground);
         this.girlSpawntime = 0;
-        
+        this.physics.add.collider(this.girl, this.player);
         //* Boy
         this.physics.add.collider(this.boy, this.ground);
         this.boySpawntime = 0;
-        
+        this.physics.add.collider(this.boy, this.player);
         //! Collider
         //* Player
         this.physics.add.collider(this.player, this.ground);
