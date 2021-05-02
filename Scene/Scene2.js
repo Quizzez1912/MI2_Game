@@ -231,7 +231,8 @@ class Scene2 extends Phaser.Scene{
         this.movePlayerManager();
         this.eventManager();
         this.randomEnemy();
-        // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes
+        
+        // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes Höher = schneller vorbeiziehen
         this.sky.tilePositionX = this.myCam.scrollX * .2;
         this.mountain.tilePositionX = this.myCam.scrollX * .4;
         this.tree.tilePositionX = this.myCam.scrollX * .6;
