@@ -239,7 +239,8 @@ class Scene2 extends Phaser.Scene{
 
         
     }
-    //! Time
+   
+    //! Timemanager
 
     timeManager(){
        
@@ -292,13 +293,6 @@ class Scene2 extends Phaser.Scene{
                 console.log(" jumpBoost JUMP schon benutzt == " + this.avaibleBoostJump )
                 
             }
-                
-             //? Check ob der Bug noch auftritt
-            /*if(this.player.y > 670){
-                console.log("FALL OF MAP");
-               this.player.y = 660;
-            
-            }    */
             
             //* Player shoot Riceball
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
@@ -315,7 +309,7 @@ class Scene2 extends Phaser.Scene{
 
                 }    
 
-
+                //* Interiert durch alle child Objekte einer Group und rufen Update auf bei jedem Child
                 /*for(var i = 0; i < this.riceballs.getChildren().length; i++){
                     this.riceball = this.riceballs.getChildren()[i];
                     this.riceball.update();
@@ -384,7 +378,8 @@ class Scene2 extends Phaser.Scene{
             }   
         } 
     
-        //! Collider Functions
+       //#region  //! Collider Functions ( WasabiHit  RicebowlHit RiceballHit)
+        
         wasabiHit(player,wasabi){
             wasabi.destroy();
             this.hpValue--;
@@ -408,6 +403,9 @@ class Scene2 extends Phaser.Scene{
             riceball.destroy();
         }
 
+        //#endregion
+        
+        
         spawnWasabi(){
             var newWasabi = new Wasabi(this);   
             console.log("SPAWNED WASABI");
@@ -415,8 +413,6 @@ class Scene2 extends Phaser.Scene{
         
         
         randomEnemy(){
-        
-           
             this.wasabiSpawntime++;
             
             if(this.wasabiSpawntime/60 > 5){

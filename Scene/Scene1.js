@@ -7,7 +7,7 @@ class Scene1 extends Phaser.Scene {
     
     preload() {
                
-        //! Preload für StartScene 
+        //#region //! Preload für StartScene (Background Controls Gametitle MusicIcon PlayButton)
         // Background
         this.load.image("background","assets/bg.png");
         // Controls
@@ -25,8 +25,9 @@ class Scene1 extends Phaser.Scene {
             frameHeight: 64
           });
         
+          //#endregion
 
-        //! Preload für das Game
+        //#region  //! Preload für das Game (Assets / Atlas)
          
         //* Hintergrund für das Spiel ( Parallax)
         this.load.image("sky", "assets/sky2.png");
@@ -69,6 +70,7 @@ class Scene1 extends Phaser.Scene {
         // Lebensanzeige
         this.load.atlas("hp", "assets/spritesheets/UI/hp.png","assets/spritesheets/UI/hp.json");
         
+        //#endregion
 
         //* Music und Soundeffekte
         // Hintergrundmusik
@@ -77,9 +79,8 @@ class Scene1 extends Phaser.Scene {
     }
     
     create() {
-      this.add.text(20,20, "Pre Game");
 
-      //! MusicButton
+     //#region  //! MusicButton
       this.MusicButton = this.add.sprite(config.width - 100 ,config.height /2 - 300 , "music");
      //? ÄNDERN  this.music = this.sound.add("music");
       var allowMusic = true; 
@@ -96,7 +97,9 @@ class Scene1 extends Phaser.Scene {
 
       //?SPÄTER AKTIVIEREN this.music.play(musicConfig);
         
-      //!Animationen 
+      //#endregion
+     
+     //#region  //!Animationen 
       
       //* Pickups 
       this.anims.create({
@@ -118,10 +121,6 @@ class Scene1 extends Phaser.Scene {
         frameRate: 3,
         repeat: -1
       });
-
-
-      
-
 
         //* MusicButon
         this.anims.create({
@@ -196,9 +195,11 @@ class Scene1 extends Phaser.Scene {
           frameRate: 5,
           repeat: -1
           });
-        
+
+        //#endregion
     
-        //! Create Start Menu
+     //#region  //! Create Start Menu (Images & Sprites)  
+        
         //* Background
         this.background = this.add.image(0,0,"background");
         this.background.setOrigin(0,0);     
@@ -214,7 +215,10 @@ class Scene1 extends Phaser.Scene {
         this.playButton = this.add.sprite(config.width /2 ,config.height / 2, "playButton");
         this.playButton.play("playButton_anim");
       
-      //! Start Menu Interaction
+        //#endregion
+    
+    //#region //! Start Menu Interaction
+        
         //* Music Button
         this.MusicButton.setInteractive({cursor : "pointer"});     // Cursor Symbol ändern
         this.MusicButton.on("pointerdown", ()=> {
@@ -237,7 +241,11 @@ class Scene1 extends Phaser.Scene {
 
         });
         
-        //! START SCENE2 SOFORT FÜR TESTZWECK
+        //#endregion
+
+    
+    
+      //! START SCENE2 SOFORT FÜR TESTZWECK
 
         this.scene.start("playGame");
     }
