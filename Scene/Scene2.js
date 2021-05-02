@@ -9,8 +9,9 @@ class Scene2 extends Phaser.Scene{
     }
     
     create() { 
+    
+        //#region //! UI Create
         
-        //! UI Create
         //* Healthbar
         this.hpValue = 6;
         this.hp = this.add.sprite(config.width-200, 10,"hp");
@@ -21,11 +22,11 @@ class Scene2 extends Phaser.Scene{
         //TODO Wenn avaibleRiceball = 0 das Reisbowl Symbol durchstreichen und keinen Text setzen nur Symbol
         //* Ricebar 
         this.avaibleRice = 0;
-        this.ricebowls = this.add.image(config.width-70, 100,"ricebowl").setScale(2);
-        this.ricebowls.setOrigin(0,0);
-        this.ricebowls.setDepth(10);
-        this.ricebowls.setScrollFactor(0);
-        this.riceCount = this.add.text(config.width - 75 ,100, "0",{
+        this.ricebowlIcon = this.add.image(config.width-70, 95,"ricebowl");
+        this.ricebowlIcon.setOrigin(0,0);
+        this.ricebowlIcon.setDepth(10);
+        this.ricebowlIcon.setScrollFactor(0);
+        this.riceCount = this.add.text(config.width - 75 ,100, "",{
             font: "65px Arial",
             fill: "#000000",
                 
@@ -33,20 +34,17 @@ class Scene2 extends Phaser.Scene{
         this.riceCount.setOrigin(1,0);
         this.riceCount.setScrollFactor(0);
         this.riceCount.setDepth(10);
-        
-        //* Boy
-        this.boy = this.physics.add.image(config.width-70, 100,"boy").setScale(2);
-        this.boy.setOrigin(0,0);
-        this.boy.setDepth(10);
-    
 
-        //* Girl
-        this.girl = this.physics.add.image(config.width-70, 100,"girl").setScale(2);
-        this.girl.setOrigin(1,0);
-        this.girl.setDepth(10);
-        
 
-        //! Background Create
+        //* JumpBoost
+        this.jumpBoostIcon = this.add.image(config.width- 350 , 10 , "jumpBoostIcon").setScale(2);
+        this.jumpBoostIcon.setOrigin(0,0);
+        this.jumpBoostIcon.setDepth(10);
+        this.jumpBoostIcon.setScrollFactor(0);
+        this.jumpBoostIcon.setAlpha(0.25);
+        //#endregion
+        
+        //#region  //! Background Create (Parallax)
         // Add SKY layer               
         this.sky = this.add.tileSprite(0,0,game.config.width, game.config.height, "sky");
         this.sky.setOrigin(0,0);
@@ -70,39 +68,42 @@ class Scene2 extends Phaser.Scene{
         this.ground.y = game.config.height;
         this.physics.add.existing(this.ground);
         this.ground.body.setCollideWorldBounds(true);
-       
-        //! World Physics
+       //#endregion 
+        
+       //#region   //! World Physics
         this.physics.world.gravity.y = 400;
         this.physics.world.bounds.width = this.ground.width;
+       //#endregion
        
-       
-        //! Player + Input
+       //#region //! Player definition and PlayerInputs
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.spacebar =  this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.player = this.physics.add.image(100 , 718-100,"player");
-    
 
-        //!PickUP
-
-        //* Jump Boost
-        this.pwrJump = this.physics.add.group({
-            key: "2x",
-            repeat: 0,
-            allowGravity: false,
-        });
-        this.pwrJump.children.iterate(child => {
-            this.physics.add.collider(child, this.ground);
-            child.x = Phaser.Math.Between(500, 1000);
-            child.y = 675;
-            child.setImmovable(true);
-            child.play("hoverJumpBoost_anim");
-        });
+       //#endregion
        
-        this.jumpBoost = false;
-        this.avaibleBoostJump = 0;    
-        this.physics.add.collider(this.player,this.pwrJump,this.takePwrJumpBoost,null , this);
+       //#region  //! Enemies (OLD Guy && Girl && Wasabi)
+        //* Boy
+        this.boy = this.physics.add.image(config.width + 100, 100,"boy").setScale(2);
+        this.boy.setOrigin(0,0);
+        this.boy.setDepth(10);
+        this.boySpawntime = 0;
 
-
+        //* Girl
+        this.girl = this.physics.add.image(config.width-70, 100,"girl").setScale(2);
+        this.girl.setOrigin(1,0);
+        this.girl.setDepth(10);
+        this.girlSpawntime = 0;
+       
+       //* Wasabi Group
+       this.wasabiGroup = this.physics.add.group();
+       this.wasabiSpawntime = 0;
+       
+       
+        //#endregion
+       
+       //#region  //!PickUP Ricebowl  + Powerups ( JumpBoost && Shield)
+        
         this.ricebowl = this.physics.add.group({
             key: "ricebowl",
             repeat : 0,
@@ -113,37 +114,69 @@ class Scene2 extends Phaser.Scene{
             child.y = 668;
             child.setImmovable(true);
         });
-
-
-        //! Groups
-        //* Riceballs
         this.riceballs = this.physics.add.group({
+                    allowGravity: false,
+                    velocityX : 400,
+                    velocityY : 10
+                }); 
+
+       
+       //* Jump Boost
+        this.pwrJump = this.physics.add.group({
+            key: "2x",
+            repeat: 0,
             allowGravity: false,
-            velocityX : 400,
-            velocityY : 10
         });
-        
-        
-        //* Wasabi Group
-        this.wasabiGroup = this.physics.add.group();
-        this.wasabiSpawntime = 0;
+        this.pwrJump.children.iterate(child => {
+            this.physics.add.collider(child, this.ground);
+            child.x = Phaser.Math.Between(500, 1000);
+            child.y = 520;
+            child.setImmovable(true);
+            child.play("hoverJumpBoost_anim");
+        });
        
-       
+        this.jumpBoost = false;
+        this.avaibleBoostJump = 0;    
+        this.physics.add.overlap(this.player,this.pwrJump,this.takePwrJumpBoost,null , this);
+
+        //* Shield
+
+        this.pwrShield = this.physics.add.group({
+            key: "atlas_shield",
+            repeat: 0,
+            allowGravity: false,
+        });
+        this.pwrShield.children.iterate(child => {
+            this.physics.add.collider(child, this.ground);
+            child.x = Phaser.Math.Between(500, 1000);
+            child.y = 600;
+            child.setImmovable(true);
+            child.play("shield_anim");
+            
+        });
+    
+        this.pwrShield = false;  
+        this.physics.add.overlap(this.player,this.pwrShield,this.takePwrShield,null , this);
+
+
+
+       //#endregion
+   
+        //#region //! Collider & Overlapping
+        
         //! Enemies
         //* Girl
         this.physics.add.collider(this.girl, this.ground);
-        this.girlSpawntime = 0;
         this.physics.add.collider(this.girl, this.player);
+
         //* Boy
         this.physics.add.collider(this.boy, this.ground);
-        this.boySpawntime = 0;
         this.physics.add.collider(this.boy, this.player);
-        //! Collider
+        
         //* Player
         this.physics.add.collider(this.player, this.ground);
         this.physics.add.overlap(this.player,this.wasabiGroup,this.wasabiHit,null , this);
         this.physics.add.overlap(this.player,this.ricebowl,this.ricebowlHit,null , this);
-
 
         //* Riceballs
         this.physics.add.collider(this.ground, this.riceballs,this.riceballHitGround,null,this);
@@ -160,14 +193,21 @@ class Scene2 extends Phaser.Scene{
         this.physics.add.collider(this.ground, this.soyfish,this.soyfishHitGround,null,this);
         this.physics.add.overlap(this.wasabiGroup, this.soyfishs,this.soyfishHitGround,null,this);
 
-        //! Main Camera
+        //#endregion
+        
+        //#region  //! Main Camera
+       
         this.myCam = this.cameras.main;
         // Grenzen der Kamera festlegen hier = 3* der Configlänge
         this.myCam.setBounds(0, 0, game.config.width * 3, game.config.height);
         // Camera verfolgt den Spieler
         this.myCam.startFollow(this.player);
         
-        //! TIMER
+        //#endregion
+
+
+        //#region //! TIMER
+        
         this.minutes = 0;
         this.time = 0;
         this.timeCount = this.add.text(20,10, "0",{
@@ -178,6 +218,7 @@ class Scene2 extends Phaser.Scene{
         this.timeCount.setOrigin(0,0);
         this.timeCount.setScrollFactor(0);
 
+        //#endregion
 
     }
     
@@ -187,7 +228,7 @@ class Scene2 extends Phaser.Scene{
        // console.log(this.player.x);
         this.timeManager();
         this.movePlayerManager();
-        
+        this.eventManager();
         this.randomEnemy();
         // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes
         this.sky.tilePositionX = this.myCam.scrollX * .2;
@@ -225,7 +266,8 @@ class Scene2 extends Phaser.Scene{
        //* Playermovement
         movePlayerManager(){
             if(this.cursorKeys.left.isDown && this.player.x > 60){
-                this.player.setVelocityX(-gameSettings.playerSpeed);
+                
+                this.player.setVelocityX(-gameSettings.playerSpeed );
         
             } else if (this.cursorKeys.right.isDown && this.player.x < game.config.width * 3 - 60){
                 this.player.setVelocityX(gameSettings.playerSpeed);
@@ -245,6 +287,7 @@ class Scene2 extends Phaser.Scene{
                 this.avaibleBoostJump ++;
                 if(this.avaibleBoostJump == 2){
                     this.jumpBoost = false;
+                    this.jumpBoostIcon.setAlpha(0.25);
                 }
                 console.log(" jumpBoost JUMP schon benutzt == " + this.avaibleBoostJump )
                 
@@ -260,10 +303,15 @@ class Scene2 extends Phaser.Scene{
             //* Player shoot Riceball
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)){
                 console.log("Vor dem Abschießen noch " + this.avaibleRice + " Reisbaelle übrig");
+                
                 if(this.avaibleRice > 0){
                 this.shootRiceball();    
                 this.avaibleRice--;
-                this.riceCount.setText(this.avaibleRice);
+                if(this.avaibleRice == 0) {
+                    this.riceCount.setText("");    
+                } else {
+                    this.riceCount.setText(this.avaibleRice);
+                }
 
                 }    
 
@@ -276,13 +324,21 @@ class Scene2 extends Phaser.Scene{
             }
         }
           
-        
         shootRiceball(){
             var riceball = new Riceball(this);
         }
 
-        
-        
+        eventManager(){
+            if(this.avaibleRice == 0){
+                this.ricebowlIcon.alpha = 0.5;
+
+            } else {
+                this.ricebowlIcon.alpha = 1.0;      
+            }
+
+        }
+
+
         controlHp(hpValue){
         
             switch(hpValue){
@@ -340,7 +396,12 @@ class Scene2 extends Phaser.Scene{
             ricebowl.destroy();
             console.log("Ricebowl aufgehoben");
             this.avaibleRice += 10;
-            this.riceCount.setText(this.avaibleRice);
+            if(this.avaibleRice == 0) {
+                this.riceCount.setText("");    
+            } else {
+                this.riceCount.setText(this.avaibleRice);
+            }
+
         }
         
         riceballHitGround(ground,riceball){
@@ -369,9 +430,12 @@ class Scene2 extends Phaser.Scene{
         takePwrJumpBoost(player,jumpBoost){
             jumpBoost.destroy();
             this.jumpBoost = true;
-            console.log("JumpBoost picked up!")
+            this.jumpBoostIcon.setAlpha(1);
+            console.log("JumpBoost picked up!");
+        }
 
-
+        takePwrShield(player,shield){
+            shield.destroy();
 
         }
         

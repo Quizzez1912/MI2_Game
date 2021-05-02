@@ -39,12 +39,15 @@ class Scene1 extends Phaser.Scene {
         // Player
         this.load.image("player","assets/spritesheets/game/oni1.png");
 
-        // Pickup
+        // PowerUP JUmpBoost
         this.load.atlas("atlas_jumpBoost", "assets/spritesheets/game/powerups/jumpBoost.png","assets/spritesheets/game/powerups/jumpBoost.json");
+        this.load.image("jumpBoostIcon" ,"assets/spritesheets/game/powerups/jumpBoostIcon.png");
 
+        // Shield
+        this.load.atlas("shield", "assets/spritesheets/game/powerups/shield.png","assets/spritesheets/game/powerups/shield.json");
 
         // Rice-ball
-        this.load.image("ricebowl","assets/spritesheets/game/ricebowl.png");
+        this.load.image("ricebowl","assets/spritesheets/game/ricebowl1.png");
         this.load.image("riceball","assets/spritesheets/game/riceball_oni.png");
 
         // Girl
@@ -105,6 +108,19 @@ class Scene1 extends Phaser.Scene {
         frameRate: 15,
         repeat: -1
       });
+
+      this.anims.create({
+        key: "shield_anim",
+        frames: this.anims.generateFrameNumbers("shield" ,{
+          start: 0,
+          end: 1,
+        }),
+        frameRate: 3,
+        repeat: -1
+      });
+
+
+      
 
 
         //* MusicButon
