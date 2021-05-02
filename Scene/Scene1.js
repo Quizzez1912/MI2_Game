@@ -39,6 +39,10 @@ class Scene1 extends Phaser.Scene {
         // Player
         this.load.image("player","assets/spritesheets/game/oni1.png");
 
+        // Pickup
+        this.load.atlas("atlas_jumpBoost", "assets/spritesheets/game/powerups/jumpBoost.png","assets/spritesheets/game/powerups/jumpBoost.json");
+
+
         // Rice-ball
         this.load.image("ricebowl","assets/spritesheets/game/ricebowl.png");
         this.load.image("riceball","assets/spritesheets/game/riceball_oni.png");
@@ -90,7 +94,19 @@ class Scene1 extends Phaser.Scene {
       //?SPÄTER AKTIVIEREN this.music.play(musicConfig);
         
       //!Animationen 
-        
+      
+      //* Pickups 
+      this.anims.create({
+        key: "hoverJumpBoost_anim",
+        frames: this.anims.generateFrameNumbers("atlas_jumpBoost" ,{
+          start: 0,
+          end: 10,
+        }),
+        frameRate: 15,
+        repeat: -1
+      });
+
+
         //* MusicButon
         this.anims.create({
           key: "musicOn_anim",
@@ -207,7 +223,7 @@ class Scene1 extends Phaser.Scene {
         
         //! START SCENE2 SOFORT FÜR TESTZWECK
 
-       // this.scene.start("playGame");
+        this.scene.start("playGame");
     }
 
     update(){

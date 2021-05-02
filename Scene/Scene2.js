@@ -84,6 +84,25 @@ class Scene2 extends Phaser.Scene{
 
         //!PickUP
 
+        //* Jump Boost
+        this.pwrJump = this.physics.add.group({
+            key: "2x",
+            repeat: 0,
+            allowGravity: false,
+        });
+        this.pwrJump.children.iterate(child => {
+            this.physics.add.collider(child, this.ground);
+            child.x = Phaser.Math.Between(500, 1000);
+            child.y = 675;
+            child.setImmovable(true);
+            child.play("hoverJumpBoost_anim");
+        });
+       
+        this.jumpBoost = false;
+        this.avaibleBoostJump = 0;    
+        this.physics.add.collider(this.player,this.pwrJump,this.takePwrJumpBoost,null , this);
+
+
         this.ricebowl = this.physics.add.group({
             key: "ricebowl",
             repeat : 0,
@@ -220,6 +239,16 @@ class Scene2 extends Phaser.Scene{
                 this.player.setVelocityY(-gameSettings.playerSpeed);
                 
                 } 
+            // Jump with Boost    
+            if(this.cursorKeys.up.isDown && this.player.body.onFloor() && this.jumpBoost) { 
+                this.player.setVelocityY(-gameSettings.playerSpeed*1.5);
+                this.avaibleBoostJump ++;
+                if(this.avaibleBoostJump == 2){
+                    this.jumpBoost = false;
+                }
+                console.log(" jumpBoost JUMP schon benutzt == " + this.avaibleBoostJump )
+                
+            }
                 
              //? Check ob der Bug noch auftritt
             /*if(this.player.y > 670){
@@ -333,6 +362,16 @@ class Scene2 extends Phaser.Scene{
                 this.wasabiSpawntime = 0;
                 this.spawnWasabi();
             }
+
+        }
+
+
+        takePwrJumpBoost(player,jumpBoost){
+            jumpBoost.destroy();
+            this.jumpBoost = true;
+            console.log("JumpBoost picked up!")
+
+
 
         }
         
