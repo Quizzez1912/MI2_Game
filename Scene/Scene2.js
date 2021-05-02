@@ -36,7 +36,7 @@ class Scene2 extends Phaser.Scene{
         
         //* Boy
 <<<<<<< HEAD
-        this.boy = this.add.image(boy.width-70, 100,"boy").setScale(2);
+
 =======
         this.boy = this.add.image(config.width-70, 100,"boy").setScale(2);
 >>>>>>> master
