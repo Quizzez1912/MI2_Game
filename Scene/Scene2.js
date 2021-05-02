@@ -35,23 +35,17 @@ class Scene2 extends Phaser.Scene{
         this.riceCount.setDepth(10);
         
         //* Boy
-<<<<<<< HEAD
 
-=======
+
+
         this.boy = this.add.image(config.width-70, 100,"boy").setScale(2);
->>>>>>> master
         this.boy.setOrigin(0,0);
         this.boy.setDepth(10);
         this.boy.setScrollFactor(0);
 
         //* Girl
-<<<<<<< HEAD
-        this.girl = this.add.image(girl.width-70, 100,"girl").setScale(2);
-        this.girl.setOrigin(0,0);
-=======
         this.girl = this.physics.add.image(config.width-70, 100,"girl").setScale(2);
         this.girl.setOrigin(1,0);
->>>>>>> master
         this.girl.setDepth(10);
         this.girl.setScrollFactor(0);
 
