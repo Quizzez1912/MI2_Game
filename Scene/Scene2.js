@@ -37,7 +37,7 @@ class Scene2 extends Phaser.Scene{
 
 
         //* JumpBoost
-        this.jumpBoostIcon = this.add.image(config.width- 350 , 10 , "jumpBoostIcon").setScale(2);
+        this.jumpBoostIcon = this.add.image(20 , 10 , "jumpBoostIcon").setScale(2);
         this.jumpBoostIcon.setOrigin(0,0);
         this.jumpBoostIcon.setDepth(10);
         this.jumpBoostIcon.setScrollFactor(0);
@@ -207,7 +207,8 @@ class Scene2 extends Phaser.Scene{
 
 
         //#region //! TIMER
-        
+        //?
+        /*
         this.minutes = 0;
         this.time = 0;
         this.timeCount = this.add.text(20,10, "0",{
@@ -217,7 +218,7 @@ class Scene2 extends Phaser.Scene{
         });
         this.timeCount.setOrigin(0,0);
         this.timeCount.setScrollFactor(0);
-
+*/
         //#endregion
 
     }
@@ -226,7 +227,7 @@ class Scene2 extends Phaser.Scene{
     update() {
        //TODO für TEST ERSTMAL AUS
        // console.log(this.player.x);
-        this.timeManager();
+       //? this.timeManager();
         this.movePlayerManager();
         this.eventManager();
         this.randomEnemy();
@@ -242,7 +243,7 @@ class Scene2 extends Phaser.Scene{
    
     //! Timemanager
 
-    timeManager(){
+  /*  timeManager(){
        
         this.time++;
 
@@ -259,7 +260,7 @@ class Scene2 extends Phaser.Scene{
         this.timeCount.setText(this.minutesString + "." + (this.time/60).toFixed(2));   
         
         
-    }
+    }*/
 
        //#region  //! Player Functions & Eventmanager
 
