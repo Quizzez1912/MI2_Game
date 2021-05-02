@@ -9,15 +9,15 @@ class Scene1 extends Phaser.Scene {
                
         //#region //! Preload für StartScene (Background Controls Gametitle MusicIcon PlayButton)
         // Background
-        this.load.image("background","assets/bg.png");
+        this.load.image("background","assets/spritesheets/pregame/background.png");
         // Controls
         this.load.image("controls","assets/spritesheets/pregame/controls.png");
         // Title
         this.load.image("sushimaster","assets/spritesheets/pregame/sushimasterLogo.png")
         // PlayButton Spritesheet
-        this.load.spritesheet("playButton", "assets/spritesheets/pregame/play.png",{
-            frameWidth: 500,
-            frameHeight: 300
+        this.load.spritesheet("playButton", "assets/spritesheets/pregame/playButton.png",{
+            frameWidth: 285,
+            frameHeight: 134
           });
         // Music Icon Spritesheet
         this.load.spritesheet("music", "assets/spritesheets/pregame/music.png",{
@@ -25,6 +25,12 @@ class Scene1 extends Phaser.Scene {
             frameHeight: 64
           });
         
+        
+          
+          
+          //Shield
+
+
           //#endregion
 
         //#region  //! Preload für das Game (Assets / Atlas)
@@ -214,7 +220,18 @@ class Scene1 extends Phaser.Scene {
         //* Play Button
         this.playButton = this.add.sprite(config.width /2 ,config.height / 2, "playButton");
         this.playButton.play("playButton_anim");
-      
+
+        //* PowerUps
+        this.jumpIcon = this.add.image(10,100 ,"jumpBoostIcon").setScale(2);
+        this.jumpIcon.setOrigin(0,0);
+        this.jumpIcon.setDepth(10);
+       
+        this.ShieldIcon = this.add.image(10,200 ,"shield");
+        this.ShieldIcon.setOrigin(0,0);
+        this.ShieldIcon.setDepth(10);
+       
+       
+       
         //#endregion
     
     //#region //! Start Menu Interaction
@@ -223,13 +240,13 @@ class Scene1 extends Phaser.Scene {
         this.MusicButton.setInteractive({cursor : "pointer"});     // Cursor Symbol ändern
         this.MusicButton.on("pointerdown", ()=> {
             if(allowMusic){
-                this.music.stop();
+                //?this.music.stop();
                 allowMusic = false;
                 this.MusicButton.play("musicOff_anim")
             } else {
-                this.music.play(musicConfig);
+              //?  this.music.play(musicConfig);
                 allowMusic = true;
-                this.MusicButton.play("musicOn_anim")
+               this.MusicButton.play("musicOn_anim")
             }  
         });
 
@@ -247,7 +264,7 @@ class Scene1 extends Phaser.Scene {
     
       //! START SCENE2 SOFORT FÜR TESTZWECK
 
-        this.scene.start("playGame");
+        //this.scene.start("playGame");
     }
 
     update(){
