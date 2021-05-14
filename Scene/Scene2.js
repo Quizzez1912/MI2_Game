@@ -46,17 +46,18 @@ class Scene2 extends Phaser.Scene{
         
         //#region  //! Background Create (Parallax)
         // Add SKY layer               
-        this.sky = this.add.tileSprite(0,0,game.config.width, game.config.height, "sky");
+        /*this.sky = this.add.tileSprite(0,0,game.config.width, game.config.height, "sky");
         this.sky.setOrigin(0,0);
         this.sky.setScrollFactor(0);
-        
+        */
+
         this.mountain = this.add.tileSprite(0,0,game.config.width, game.config.height, "mountain");
         this.mountain.setOrigin(0,0);
         this.mountain.setScrollFactor(0);
 
 
         // tree Layer mit Höhe von 350 pixel
-        this.tree = this.add.tileSprite(0, 0, game.config.width,game.config.height, "tree");
+        this.tree = this.add.tileSprite(0, 0, game.config.width,610, "tree");
         this.tree.setOrigin(0, 1);
         this.tree.setScrollFactor(0);
         this.tree.y= game.config.height - 50;
@@ -233,7 +234,7 @@ class Scene2 extends Phaser.Scene{
         this.randomEnemy();
         
         // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes Höher = schneller vorbeiziehen
-        this.sky.tilePositionX = this.myCam.scrollX * .2;
+       /* //? this.sky.tilePositionX = this.myCam.scrollX * .2;*/
         this.mountain.tilePositionX = this.myCam.scrollX * .4;
         this.tree.tilePositionX = this.myCam.scrollX * .6;
         this.ground.tilePositionX = this.myCam.scrollX;
