@@ -58,11 +58,15 @@ class Scene1 extends Phaser.Scene {
         this.load.image("riceball","assets/spritesheets/game/riceball_oni.png");
 
         // Girl
-        this.load.spritesheet("girl","assets/spritesheets/game/girl.png");
-
+        this.load.spritesheet("girl","assets/spritesheets/pregame/girl.png",{
+          frameWidth: 75,
+          frameHeight: 126
+        });
         // Boy
-        this.load.spritesheet("boy","assets/spritesheets/pregame/boy.png");
-
+        this.load.spritesheet("boy","assets/spritesheets/pregame/boy.png",{
+          frameWidth: 200,
+          frameHeight: 320
+        });
         // Wasabi
         this.load.image("wasabi","assets/spritesheets/pregame/wasabi.png");
 
