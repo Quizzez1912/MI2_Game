@@ -81,6 +81,9 @@ class Scene2 extends Phaser.Scene {
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.player = this.physics.add.image(100, 718 - 100, "player");
 
+        // test für soyfish und chopstick
+        this.spacebarsoyfish = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.spacebarchopstick = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         //#endregion
 
         //#region  //! Enemies (OLD Guy && Girl && Wasabi)
@@ -121,6 +124,17 @@ class Scene2 extends Phaser.Scene {
             velocityY: 10
         });
 
+        this.soyfish = this.physics.add.group({
+            allowGravity: false,
+            velocityX: 400,
+            velocityY: 10
+        });
+
+        this.chopstick = this.physics.add.group({
+            allowGravity: false,
+            velocityX: 400,
+            velocityY: 10
+        });
 
         //* Jump Boost
         this.pwrJump = this.physics.add.group({
@@ -318,10 +332,29 @@ class Scene2 extends Phaser.Scene {
               }  */
 
         }
+        if (Phaser.Input.Keyboard.JustDown(this.spacebarsoyfish)) {
+            this.avaibleSoyfish = 100;
+            this.shootSoyfish();
+
+            
+          
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.spacebarchopstick)) {
+            this.avaibleChopstick = 100;
+            this.shootChopstick();
+        }
     }
 
     shootRiceball() {
         var riceball = new Riceball(this);
+    }
+
+    shootSoyfish() {
+        var soyfish = new Soyfish(this);
+    }
+
+    shootRiceball() {
+        var chopstick = new Chopstick(this);
     }
 
     eventManager() {
@@ -380,7 +413,7 @@ class Scene2 extends Phaser.Scene {
         }
     }
 
-    //#region  //! Collider Functions ( WasabiHit  RicebowlHit RiceballHit)
+    //#region  //! Collider Functions ( WasabiHit RicebowlHit RiceballHit ChopstickHit SoyfishHit)
 
     wasabiHit(player, wasabi) {
         wasabi.destroy();
@@ -389,6 +422,19 @@ class Scene2 extends Phaser.Scene {
 
     }
 
+    chopstickHit(player, chopstick) {
+        chopstick.destroy();
+        this.hpValue--;
+        this.controlHp(this.hpValue);
+
+    }
+
+    soyfishHit(player, soyfish) {
+        spyfish.destroy();
+        this.hpValue--;
+        this.controlHp(this.hpValue);
+
+    }
     ricebowlHit(player, ricebowl) {
         ricebowl.destroy();
         console.log("Ricebowl aufgehoben");
@@ -399,6 +445,14 @@ class Scene2 extends Phaser.Scene {
             this.riceCount.setText(this.avaibleRice);
         }
 
+    }
+
+    soyfishHitGround(ground, riceball) {
+        riceball.destroy();
+    }
+
+    chopstickHitGround(ground, riceball) {
+        riceball.destroy();
     }
 
     riceballHitGround(ground, riceball) {
