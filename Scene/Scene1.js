@@ -68,7 +68,7 @@ class Scene1 extends Phaser.Scene {
           frameHeight: 320
         });
         // Wasabi
-        this.load.image("wasabi","assets/spritesheets/pregame/wasabi.png");
+        this.load.image("wasabi","assets/spritesheets/game/wasabi.png");
 
         // Soyfish
         this.load.image("soyfish","assets/spritesheets/game/soyfish.png");
