@@ -197,6 +197,8 @@ class Scene2 extends Phaser.Scene {
 
         //* Player
         this.physics.add.collider(this.player, this.ground);
+        this.physics.add.collider(this.player, this.chopsticks, this.chopstickHitPlayer, null, this);
+        this.physics.add.collider(this.player, this.soyfishs, this.soyfishHitPlayer, null, this);
         this.physics.add.overlap(this.player, this.wasabiGroup, this.wasabiHit, null, this);
         this.physics.add.overlap(this.player, this.ricebowl, this.ricebowlHit, null, this);
 
@@ -209,10 +211,12 @@ class Scene2 extends Phaser.Scene {
 
         //* Chopsticks
         this.physics.add.collider(this.ground, this.chopsticks, this.chopstickHitGround, null, this);
+        this.physics.add.collider(this.player, this.chopsticks, this.chopstickHitPlayer, null, this);
         this.physics.add.overlap(this.wasabiGroup, this.chopsticks, this.chopstickHitGround, null, this);
 
         //* Soyfish
         this.physics.add.collider(this.ground, this.soyfishs, this.soyfishHitGround, null, this);
+        this.physics.add.collider(this.player, this.soyfishs, this.soyfishHitPlayer, null, this);
         this.physics.add.overlap(this.wasabiGroup, this.soyfishs, this.soyfishHitGround, null, this);
 
         //#endregion
@@ -363,12 +367,12 @@ class Scene2 extends Phaser.Scene {
     }
 
     shootSoyfish() {
-        var soyfish = new Soyfish(this);
+        this.soyfish = new Soyfish(this);
         this.boy.play("boy_anim");
     }
 
     shootChopstick() {
-        var chopstick = new Chopstick(this);
+        this.chopstick = new Chopstick(this);
         this.girl.play("girl_anim");
     }
 
@@ -437,14 +441,14 @@ class Scene2 extends Phaser.Scene {
 
     }
 
-    chopstickHit(player, chopstick) {
+    chopstickHitPlayer(player, chopstick) {
         chopstick.destroy();
         this.hpValue--;
         this.controlHp(this.hpValue);
 
     }
 
-    soyfishHit(player, soyfish) {
+    soyfishHitPlayer(player, soyfish) {
         soyfish.destroy();
         this.hpValue--;
         this.controlHp(this.hpValue);
@@ -462,12 +466,12 @@ class Scene2 extends Phaser.Scene {
 
     }
 
-    soyfishHitGround(ground, riceball) {
-        riceball.destroy();
+    soyfishHitGround(ground, soyfish) {
+        soyfish.destroy();
     }
 
-    chopstickHitGround(ground, riceball) {
-        riceball.destroy();
+    chopstickHitGround(ground, chopstick) {
+        chopstick.destroy();
     }
 
     riceballHitGround(ground, riceball) {
