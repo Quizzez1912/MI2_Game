@@ -88,13 +88,13 @@ class Scene2 extends Phaser.Scene {
 
         //#region  //! Enemies (OLD Guy && Girl && Wasabi)
         //* Boy
-        this.boy = this.physics.add.image(config.width + 100, 100, "boy").setScale(0.75);
+        this.boy = this.physics.add.sprite(config.width - 500, 100, "boy").setScale(1.75);
         this.boy.setOrigin(0, 0);
         this.boy.setDepth(20);
         this.boySpawntime = 0;
 
         //* Girl
-        this.girl = this.physics.add.image(config.width - 70, 100, "girl").setScale(2);
+        this.girl = this.physics.add.sprite(config.width - 70, 100, "girl").setScale(1.75);
         this.girl.setOrigin(1, 0);
         this.girl.setDepth(10);
         this.girlSpawntime = 0;
@@ -102,6 +102,23 @@ class Scene2 extends Phaser.Scene {
         //* Wasabi Group
         this.wasabiGroup = this.physics.add.group();
         this.wasabiSpawntime = 0;
+
+        //* Soyfish Group
+        this.soyfishs = this.physics.add.group({
+            allowGravity: false,
+            velocityX: -700,
+            velocityY: 90
+        });
+        this.soyfishs.setDepth(30);
+
+        //* Chopstick Group
+        this.chopsticks = this.physics.add.group({
+            allowGravity: false,
+            velocityX: -550,
+            velocityY: 40
+        });
+
+
 
 
         //#endregion
@@ -124,17 +141,7 @@ class Scene2 extends Phaser.Scene {
             velocityY: 10
         });
 
-        this.soyfish = this.physics.add.group({
-            allowGravity: false,
-            velocityX: 400,
-            velocityY: 10
-        });
 
-        this.chopstick = this.physics.add.group({
-            allowGravity: false,
-            velocityX: 400,
-            velocityY: 10
-        });
 
         //* Jump Boost
         this.pwrJump = this.physics.add.group({
@@ -205,7 +212,7 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.overlap(this.wasabiGroup, this.chopsticks, this.chopstickHitGround, null, this);
 
         //* Soyfish
-        this.physics.add.collider(this.ground, this.soyfish, this.soyfishHitGround, null, this);
+        this.physics.add.collider(this.ground, this.soyfishs, this.soyfishHitGround, null, this);
         this.physics.add.overlap(this.wasabiGroup, this.soyfishs, this.soyfishHitGround, null, this);
 
         //#endregion
@@ -235,6 +242,12 @@ class Scene2 extends Phaser.Scene {
         this.timeCount.setScrollFactor(0);
 */
         //#endregion
+
+        console.log(this.boy.x + "boy x");
+        console.log(this.boy.y);
+
+        console.log(this.girl.x + " girl x");
+        console.log(this.girl.y);
 
     }
 
@@ -336,8 +349,8 @@ class Scene2 extends Phaser.Scene {
             this.avaibleSoyfish = 100;
             this.shootSoyfish();
 
-            
-          
+
+
         }
         if (Phaser.Input.Keyboard.JustDown(this.spacebarchopstick)) {
             this.avaibleChopstick = 100;
@@ -351,10 +364,12 @@ class Scene2 extends Phaser.Scene {
 
     shootSoyfish() {
         var soyfish = new Soyfish(this);
+        this.boy.play("boy_anim");
     }
 
-    shootRiceball() {
+    shootChopstick() {
         var chopstick = new Chopstick(this);
+        this.girl.play("girl_anim");
     }
 
     eventManager() {
@@ -430,7 +445,7 @@ class Scene2 extends Phaser.Scene {
     }
 
     soyfishHit(player, soyfish) {
-        spyfish.destroy();
+        soyfish.destroy();
         this.hpValue--;
         this.controlHp(this.hpValue);
 
