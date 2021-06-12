@@ -46,7 +46,7 @@ class Scene1 extends Phaser.Scene {
     // Player
     this.load.image("player", "assets/spritesheets/game/oni1.png");
 
-    // PowerUP JUmpBoost
+    // PowerUP JumpBoost
     this.load.atlas("atlas_jumpBoost", "assets/spritesheets/game/powerups/jumpBoost.png", "assets/spritesheets/game/powerups/jumpBoost.json");
     this.load.image("jumpBoostIcon", "assets/spritesheets/game/powerups/jumpBoostIcon.png");
 
@@ -73,6 +73,9 @@ class Scene1 extends Phaser.Scene {
     //* UI Elemente
     // Lebensanzeige
     this.load.atlas("hp", "assets/spritesheets/UI/hp.png", "assets/spritesheets/UI/hp.json");
+
+    // Bossbar
+    this.load.atlas("bosshp", "assets/enemy/bosshp.png", "assets/enemy/bosshp.json");
 
     //#endregion
 
@@ -191,6 +194,46 @@ class Scene1 extends Phaser.Scene {
       frameRate: 8,
       repeat: 0
     });
+
+    //* BossHP
+    //* Health UI 
+
+    this.anims.create({
+      key: "bosshp4_anim",
+      frames: [{ key: "bosshp", frame: 1 },],
+      frameRate: 8,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: "bosshp3_anim",
+      frames: [{ key: "bosshp", frame: 2 },],
+      frameRate: 8,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: "bosshp2_anim",
+      frames: [{ key: "bosshp", frame: 3 },],
+      frameRate: 8,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: "bosshp1_anim",
+      frames: [{ key: "bosshp", frame: 4 },],
+      frameRate: 8,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: "bosshp0_anim",
+      frames: [{ key: "bosshp", frame: 5 },],
+      frameRate: 8,
+      repeat: 0
+    });
+
+
 
     //* PlayButton
     this.anims.create({

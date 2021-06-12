@@ -19,6 +19,13 @@ class Scene2 extends Phaser.Scene {
         this.hp.setDepth(10);
         this.hp.setScrollFactor(0);
 
+        //* Bosshealthbar
+        this.bosshpValue = 5;
+        this.bosshp = this.add.sprite(config.width / 2, 10, "bosshp").setScale(1.25);
+        this.bosshp.setOrigin(0.5, 0);
+        this.bosshp.setDepth(10);
+        this.bosshp.setScrollFactor(0);
+
         //TODO Wenn avaibleRiceball = 0 das Reisbowl Symbol durchstreichen und keinen Text setzen nur Symbol
         //* Ricebar 
         this.avaibleRice = 0;
@@ -88,13 +95,13 @@ class Scene2 extends Phaser.Scene {
 
         //#region  //! Enemies (OLD Guy && Girl && Wasabi)
         //* Boy
-        this.boy = this.physics.add.sprite(config.width - 500, 100, "boy").setScale(1.75);
+        this.boy = this.physics.add.sprite(config.width, 100, "boy").setScale(1.75);
         this.boy.setOrigin(0, 0);
         this.boy.setDepth(20);
         this.boySpawntime = 0;
 
         //* Girl
-        this.girl = this.physics.add.sprite(config.width - 70, 100, "girl").setScale(1.75);
+        this.girl = this.physics.add.sprite(config.width - 200, 100, "girl").setScale(1.75);
         this.girl.setOrigin(1, 0);
         this.girl.setDepth(10);
         this.girlSpawntime = 0;
@@ -205,6 +212,7 @@ class Scene2 extends Phaser.Scene {
         //* Riceballs
         this.physics.add.collider(this.ground, this.riceballs, this.riceballHitGround, null, this);
         this.physics.add.overlap(this.wasabiGroup, this.riceballs, this.riceballHitGround, null, this);
+        this.physics.add.collider(this.girl, this.riceballs, this.playerHitGirl, null, this);
 
         //* Wasabi
         this.physics.add.collider(this.wasabiGroup, this.ground);
@@ -247,11 +255,10 @@ class Scene2 extends Phaser.Scene {
 */
         //#endregion
 
-        console.log(this.boy.x + "boy x");
-        console.log(this.boy.y);
 
-        console.log(this.girl.x + " girl x");
-        console.log(this.girl.y);
+        //! TESTBEFEHLE FÜR DEBUGGIN
+
+        this.girl.setImmovable(true);
 
     }
 
@@ -426,10 +433,48 @@ class Scene2 extends Phaser.Scene {
                 this.hp.play("hp0_anim");
                 console.log("******TOT********");
                 break;
+        }
+
+    }
+    controlBossHp(bosshpValue) {
+
+        switch (bosshpValue) {
+            // 4 Herzen
+            case 4:
+                console.log("Boss LEBEN === " + bosshpValue);
+                this.bosshp.play("bosshp4_anim");
+                break;
+
+            // 3 Herzen
+            case 3:
+                console.log("Boss LEBEN === " + bosshpValue);
+                this.bosshp.play("bosshp3_anim");
+                break;
+
+            // 2 Herzen
+            case 2:
+                console.log("Boss LEBEN === " + bosshpValue);
+                this.bosshp.play("bosshp2_anim");
+                break;
+
+            // 1 Herz
+            case 1:
+                console.log("Boss LEBEN === " + bosshpValue);
+                this.bosshp.play("bosshp1_anim");
+                break;
+
+            // 0 Herzen
+            case 0:
+                console.log("Boss LEBEN === " + bosshpValue);
+                this.bosshp.play("bosshp0_anim");
+                console.log("******BOSS IST TOT********");
+                break;
 
 
 
         }
+
+
     }
 
     //#region  //! Collider Functions ( WasabiHit RicebowlHit RiceballHit ChopstickHit SoyfishHit)
@@ -478,6 +523,12 @@ class Scene2 extends Phaser.Scene {
         riceball.destroy();
     }
 
+    playerHitGirl(girl, riceball) {
+        riceball.destroy();
+        this.bosshpValue--;
+        this.controlBossHp(this.bosshpValue);
+        console.log(this.bosshpValue + "BOSS LEBEN ÜBRIG")
+    }
     //#endregion
 
 
