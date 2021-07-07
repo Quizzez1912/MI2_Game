@@ -19,12 +19,20 @@ class Scene2 extends Phaser.Scene {
         this.hp.setDepth(10);
         this.hp.setScrollFactor(0);
 
-        //* Bosshealthbar
-        this.bosshpValue = 5;
-        this.bosshp = this.add.sprite(config.width / 2, 10, "bosshp").setScale(1.25);
-        this.bosshp.setOrigin(0.5, 0);
-        this.bosshp.setDepth(10);
-        this.bosshp.setScrollFactor(0);
+        //* Bosshealthbar Girl
+        this.bosshpGirlValue = 5;
+        this.bosshpGirl = this.add.sprite(config.width / 2, 10, "bosshp").setScale(1.25);
+        this.bosshpGirl.setOrigin(0.5, 0);
+        this.bosshpGirl.setDepth(0);
+        this.bosshpGirl.setScrollFactor(0);
+
+        //* Bosshealthbar Boy
+        this.bosshpBoyValue = 5;
+        this.bosshpBoy = this.add.sprite(config.width / 2, 10, "bosshp").setScale(1.25);
+        this.bosshpBoy.setOrigin(0.5, 0);
+        this.bosshpBoy.setDepth(0);
+        this.bosshpBoy.setScrollFactor(0);
+
 
         //TODO Wenn avaibleRiceball = 0 das Reisbowl Symbol durchstreichen und keinen Text setzen nur Symbol
         //* Ricebar 
@@ -64,10 +72,10 @@ class Scene2 extends Phaser.Scene {
 
 
         // tree Layer mit Höhe von 350 pixel
-        this.tree = this.add.tileSprite(0, 0, game.config.width, 610, "tree");
+        this.tree = this.add.tileSprite(0, 0, game.config.width, 1000, "tree");
         this.tree.setOrigin(0, 1);
         this.tree.setScrollFactor(0);
-        this.tree.y = game.config.height - 50;
+        this.tree.y = game.config.height + 50;
 
         // Ground Layer mit Höhe von 50px
         this.ground = this.add.tileSprite(0, 1, game.config.width * 3, 50, "ground");
@@ -88,7 +96,7 @@ class Scene2 extends Phaser.Scene {
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.player = this.physics.add.image(100, 718 - 100, "player");
 
-        // test für soyfish und chopstick
+        // TODO test für soyfish und chopstick NOCH ENTFERNEN
         this.spacebarsoyfish = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.spacebarchopstick = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         //#endregion
@@ -98,14 +106,23 @@ class Scene2 extends Phaser.Scene {
         this.boy = this.physics.add.sprite(config.width, 100, "boy").setScale(1.75);
         this.boy.setOrigin(0, 0);
         this.boy.setDepth(20);
+        this.boy.setImmovable(true);
         this.boySpawntime = 0;
+        this.boySpawntime = 0;
+        this.boyActive = false;
+        this.boy.dead = false;
+        console.log("x boy" + this.boy.x)
 
         //* Girl
+        //TODO Anpassen des Spawnpunktes für das Spiel
         this.girl = this.physics.add.sprite(config.width - 200, 100, "girl").setScale(1.75);
         this.girl.setOrigin(1, 0);
         this.girl.setDepth(10);
+        this.girl.setImmovable(true);
         this.girlSpawntime = 0;
-
+        this.girlActive = false;
+        this.girl.dead = false;
+        console.log("x girl" + this.girl.x)
         //* Wasabi Group
         this.wasabiGroup = this.physics.add.group();
         this.wasabiSpawntime = 0;
@@ -122,7 +139,7 @@ class Scene2 extends Phaser.Scene {
         this.chopsticks = this.physics.add.group({
             allowGravity: false,
             velocityX: -550,
-            velocityY: 40
+            velocityY: 70
         });
 
 
@@ -213,6 +230,7 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.collider(this.ground, this.riceballs, this.riceballHitGround, null, this);
         this.physics.add.overlap(this.wasabiGroup, this.riceballs, this.riceballHitGround, null, this);
         this.physics.add.collider(this.girl, this.riceballs, this.playerHitGirl, null, this);
+        this.physics.add.collider(this.boy, this.riceballs, this.playerHitBoy, null, this);
 
         //* Wasabi
         this.physics.add.collider(this.wasabiGroup, this.ground);
@@ -221,6 +239,7 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.collider(this.ground, this.chopsticks, this.chopstickHitGround, null, this);
         this.physics.add.collider(this.player, this.chopsticks, this.chopstickHitPlayer, null, this);
         this.physics.add.overlap(this.wasabiGroup, this.chopsticks, this.chopstickHitGround, null, this);
+
 
         //* Soyfish
         this.physics.add.collider(this.ground, this.soyfishs, this.soyfishHitGround, null, this);
@@ -258,7 +277,7 @@ class Scene2 extends Phaser.Scene {
 
         //! TESTBEFEHLE FÜR DEBUGGIN
 
-        this.girl.setImmovable(true);
+
 
     }
 
@@ -363,6 +382,7 @@ class Scene2 extends Phaser.Scene {
 
 
         }
+        //TODO muss entfernt werden
         if (Phaser.Input.Keyboard.JustDown(this.spacebarchopstick)) {
             this.avaibleChopstick = 100;
             this.shootChopstick();
@@ -379,10 +399,13 @@ class Scene2 extends Phaser.Scene {
     }
 
     shootChopstick() {
-        this.chopstick = new Chopstick(this);
-        this.girl.play("girl_anim");
+        if (!this.girl.dead) {
+            this.chopstick = new Chopstick(this);
+            this.girl.play("girl_anim");
+        }
     }
 
+    //! EVENTMANAGER
     eventManager() {
         if (this.avaibleRice == 0) {
             this.ricebowlIcon.alpha = 0.5;
@@ -391,6 +414,19 @@ class Scene2 extends Phaser.Scene {
             this.ricebowlIcon.alpha = 1.0;
         }
 
+        //* Active Girl Shooting
+        if (this.player.x > (this.girl.x - 800) && !(this.girl.dead)) {
+            console.log(this.player.x);
+            console.log("girl active");
+            this.enemyActivGirl();
+        }
+
+        //* Active Boy Shooting
+        if (this.player.x > (this.boy.x - 800) && !(this.boy.dead)) {
+            console.log(this.player.x);
+            console.log("boy active");
+            this.enemyActivBoy();
+        }
     }
     //#endregion
 
@@ -436,38 +472,85 @@ class Scene2 extends Phaser.Scene {
         }
 
     }
-    controlBossHp(bosshpValue) {
+    controlBossHpGirl(bosshpValueGirl) {
 
-        switch (bosshpValue) {
+        switch (bosshpValueGirl) {
             // 4 Herzen
             case 4:
-                console.log("Boss LEBEN === " + bosshpValue);
-                this.bosshp.play("bosshp4_anim");
+                console.log("Boss LEBEN === " + bosshpValueGirl);
+                this.bosshpGirl.play("bosshp4_anim");
                 break;
 
             // 3 Herzen
             case 3:
-                console.log("Boss LEBEN === " + bosshpValue);
-                this.bosshp.play("bosshp3_anim");
+                console.log("Boss LEBEN === " + bosshpValueGirl);
+                this.bosshpGirl.play("bosshp3_anim");
                 break;
 
             // 2 Herzen
             case 2:
-                console.log("Boss LEBEN === " + bosshpValue);
-                this.bosshp.play("bosshp2_anim");
+                console.log("Boss LEBEN === " + bosshpValueGirl);
+                this.bosshpGirl.play("bosshp2_anim");
                 break;
 
             // 1 Herz
             case 1:
-                console.log("Boss LEBEN === " + bosshpValue);
-                this.bosshp.play("bosshp1_anim");
+                console.log("Boss LEBEN === " + bosshpValueGirl);
+                this.bosshpGirl.play("bosshp1_anim");
                 break;
 
             // 0 Herzen
             case 0:
-                console.log("Boss LEBEN === " + bosshpValue);
-                this.bosshp.play("bosshp0_anim");
+                console.log("Boss LEBEN === " + bosshpValueGirl);
+                this.bosshpGirl.play("bosshp0_anim");
                 console.log("******BOSS IST TOT********");
+                this.girl.dead = true;
+                this.girl.active = false;
+                this.girl.destroy();
+                this.bosshpGirl.destroy();
+                //TODO ADD Fight Win Sound
+                break;
+        }
+
+    }
+
+    controlBossHpBoy(bosshpValueBoy) {
+
+        switch (bosshpValueBoy) {
+            // 4 Herzen
+            case 4:
+                console.log("Boss LEBEN === " + bosshpValueBoy);
+                this.bosshpBoy.play("bosshp4_anim");
+                break;
+
+            // 3 Herzen
+            case 3:
+                console.log("Boss LEBEN === " + bosshpValueBoy);
+                this.bosshpBoy.play("bosshp3_anim");
+                break;
+
+            // 2 Herzen
+            case 2:
+                console.log("Boss LEBEN === " + bosshpValueBoy);
+                this.bosshpBoy.play("bosshp2_anim");
+                break;
+
+            // 1 Herz
+            case 1:
+                console.log("Boss LEBEN === " + bosshpValueBoy);
+                this.bosshpBoy.play("bosshp1_anim");
+                break;
+
+            // 0 Herzen
+            case 0:
+                console.log("Boss LEBEN === " + bosshpValueBoy);
+                this.bosshpBoy.play("bosshp0_anim");
+                console.log("******BOSS IST TOT********");
+                this.boy.dead = true;
+                this.boy.active = false;
+                this.boy.destroy();
+                this.bosshpBoy.destroy();
+                //TODO ADD Fight Win Sound
                 break;
 
 
@@ -476,7 +559,6 @@ class Scene2 extends Phaser.Scene {
 
 
     }
-
     //#region  //! Collider Functions ( WasabiHit RicebowlHit RiceballHit ChopstickHit SoyfishHit)
 
     wasabiHit(player, wasabi) {
@@ -525,9 +607,16 @@ class Scene2 extends Phaser.Scene {
 
     playerHitGirl(girl, riceball) {
         riceball.destroy();
-        this.bosshpValue--;
-        this.controlBossHp(this.bosshpValue);
-        console.log(this.bosshpValue + "BOSS LEBEN ÜBRIG")
+        this.bosshpGirlValue--;
+        this.controlBossHpGirl(this.bosshpGirlValue);
+        console.log(this.bosshpGirlValue + "BOSS LEBEN ÜBRIG")
+    }
+
+    playerHitBoy(boy, riceball) {
+        riceball.destroy();
+        this.bosshpBoyValue--;
+        this.controlBossHpBoy(this.bosshpBoyValue);
+        console.log(this.bosshpBoyValue + "BOSS LEBEN ÜBRIG")
     }
     //#endregion
 
@@ -540,6 +629,21 @@ class Scene2 extends Phaser.Scene {
         console.log("SPAWNED WASABI");
     }
 
+    enemyActivGirl() {
+        console.log("SPAWN GIRL")
+        this.avaibleChopstick = 100;
+        this.girlActive = true;
+        this.bosshpGirl.setDepth(10);
+    }
+
+    enemyActivBoy() {
+        console.log("SPAWN GIRL")
+        this.avaibleSoyfish = 100;
+        this.boyActive = true;
+        this.bosshpBoy.setDepth(10);
+    }
+
+
 
     randomEnemy() {
         this.wasabiSpawntime++;
@@ -548,6 +652,25 @@ class Scene2 extends Phaser.Scene {
             this.wasabiSpawntime = 0;
             this.spawnWasabi();
         }
+
+        if (this.girlActive) {
+            this.girlSpawntime++;
+
+            if (this.girlSpawntime / 60 > 3.5) {
+                this.girlSpawntime = 0;
+                this.shootChopstick();
+            }
+        }
+
+        if (this.boyActive) {
+            this.boySpawntime++;
+
+            if (this.boySpawntime / 60 > 3.5) {
+                this.boySpawntime = 0;
+                this.shootSoyfish();
+            }
+        }
+
 
     }
 
@@ -562,6 +685,7 @@ class Scene2 extends Phaser.Scene {
         console.log("JumpBoost picked up!");
     }
 
+    //TODO not workin
     takePwrShield(player, shield) {
         shield.destroy();
 
