@@ -103,6 +103,7 @@ class Scene2 extends Phaser.Scene {
 
         //#region  //! Enemies (OLD Guy && Girl && Wasabi)
         //* Boy
+        //TODO Anpassen des Spawnpunktes für das Spiel
         this.boy = this.physics.add.sprite(config.width, 100, "boy").setScale(1.75);
         this.boy.setOrigin(0, 0);
         this.boy.setDepth(20);
@@ -208,9 +209,8 @@ class Scene2 extends Phaser.Scene {
 
         //#endregion
 
-        //#region //! Collider & Overlapping
+        //#region //! Collider & Overlapping (between Player and Enemies and other Objects)
 
-        //! Enemies
         //* Girl
         this.physics.add.collider(this.girl, this.ground);
         this.physics.add.collider(this.girl, this.player);
@@ -259,8 +259,8 @@ class Scene2 extends Phaser.Scene {
         //#endregion
 
 
-        //#region //! TIMER
-        //?
+        //#region //? BRAUCHT MAN DAS ???? TIMER 
+        //? BRAUCHT MAN DAS ????
         /*
         this.minutes = 0;
         this.time = 0;
@@ -276,9 +276,6 @@ class Scene2 extends Phaser.Scene {
 
 
         //! TESTBEFEHLE FÜR DEBUGGIN
-
-
-
     }
 
     //! Update 
@@ -288,7 +285,7 @@ class Scene2 extends Phaser.Scene {
         //? this.timeManager();
         this.movePlayerManager();
         this.eventManager();
-        this.randomEnemy();
+        this.controlEnemy();
 
         // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes Höher = schneller vorbeiziehen
         /* //? this.sky.tilePositionX = this.myCam.scrollX * .2;*/
@@ -296,11 +293,9 @@ class Scene2 extends Phaser.Scene {
         this.tree.tilePositionX = this.myCam.scrollX * .6;
         this.ground.tilePositionX = this.myCam.scrollX;
 
-
-
     }
 
-    //! Timemanager
+    //#region //! Timemanager
 
     /*  timeManager(){
          
@@ -320,6 +315,9 @@ class Scene2 extends Phaser.Scene {
           
           
       }*/
+
+    //#endregion
+
 
     //#region  //! Player Functions & Eventmanager
 
@@ -368,6 +366,7 @@ class Scene2 extends Phaser.Scene {
 
             }
 
+            //? BRAUCH MAN DAS NOCH=???
             //* Interiert durch alle child Objekte einer Group und rufen Update auf bei jedem Child
             /*for(var i = 0; i < this.riceballs.getChildren().length; i++){
                 this.riceball = this.riceballs.getChildren()[i];
@@ -375,6 +374,7 @@ class Scene2 extends Phaser.Scene {
               }  */
 
         }
+        //TODO ZUM DEBUGGEN muss entfernt werden 
         if (Phaser.Input.Keyboard.JustDown(this.spacebarsoyfish)) {
             this.avaibleSoyfish = 100;
             this.shootSoyfish();
@@ -382,13 +382,14 @@ class Scene2 extends Phaser.Scene {
 
 
         }
-        //TODO muss entfernt werden
+        //TODO  ZUM DEBUGGEN muss entfernt werden 
         if (Phaser.Input.Keyboard.JustDown(this.spacebarchopstick)) {
             this.avaibleChopstick = 100;
             this.shootChopstick();
         }
     }
 
+    //#region //! ShootFunction
     shootRiceball() {
         var riceball = new Riceball(this);
     }
@@ -404,6 +405,9 @@ class Scene2 extends Phaser.Scene {
             this.girl.play("girl_anim");
         }
     }
+
+    //#endregion
+
 
     //! EVENTMANAGER
     eventManager() {
@@ -624,6 +628,7 @@ class Scene2 extends Phaser.Scene {
     //#region //! Spawn Enemy & Powerups    
 
 
+    //#region //! spawnWasabi and activate Girl + Boy
     spawnWasabi() {
         var newWasabi = new Wasabi(this);
         console.log("SPAWNED WASABI");
@@ -643,9 +648,9 @@ class Scene2 extends Phaser.Scene {
         this.bosshpBoy.setDepth(10);
     }
 
+    //#endregion
 
-
-    randomEnemy() {
+    controlEnemy() {
         this.wasabiSpawntime++;
 
         if (this.wasabiSpawntime / 60 > 5) {
@@ -656,6 +661,7 @@ class Scene2 extends Phaser.Scene {
         if (this.girlActive) {
             this.girlSpawntime++;
 
+            //TODO BALANCING
             if (this.girlSpawntime / 60 > 3.5) {
                 this.girlSpawntime = 0;
                 this.shootChopstick();
@@ -665,6 +671,7 @@ class Scene2 extends Phaser.Scene {
         if (this.boyActive) {
             this.boySpawntime++;
 
+            //TODO BALANCING
             if (this.boySpawntime / 60 > 3.5) {
                 this.boySpawntime = 0;
                 this.shootSoyfish();
@@ -677,7 +684,7 @@ class Scene2 extends Phaser.Scene {
     //#endregion
 
 
-
+    //#region //! Take Powerups
     takePwrJumpBoost(player, jumpBoost) {
         jumpBoost.destroy();
         this.jumpBoost = true;
@@ -692,6 +699,7 @@ class Scene2 extends Phaser.Scene {
 
     }
 
+    //#endregion    
 }
 
 
