@@ -25,6 +25,7 @@ class Scene1 extends Phaser.Scene {
       frameHeight: 64
     });
 
+    this.load.image("showEnemies", "assets/pregame/enemies.png");
 
 
 
@@ -315,6 +316,8 @@ class Scene1 extends Phaser.Scene {
     this.playButton = this.add.sprite(config.width / 2, config.height / 2, "playButton").setScale(0.9);
     this.playButton.play("playButton_anim");
 
+    this.showEnemies = this.add.image(10, 200, "showEnemies").setScale(0.85);
+    this.showEnemies.setOrigin(0, 0);
     //#endregion
 
     //#region //! Start Menu Interaction
@@ -338,7 +341,7 @@ class Scene1 extends Phaser.Scene {
     this.playButton.on("pointerdown", () => {
       this.music.stop();
       this.scene.start("playGame");
-      
+
       //allowMusic = false;
 
     });
@@ -355,7 +358,6 @@ class Scene1 extends Phaser.Scene {
   }
 
   update() {
-
 
 
   }

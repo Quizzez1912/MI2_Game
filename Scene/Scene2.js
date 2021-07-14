@@ -96,14 +96,14 @@ class Scene2 extends Phaser.Scene {
         this.bosshpBoy.setScrollFactor(0);
 
 
-        //TODO Wenn avaibleRiceball = 0 das Reisbowl Symbol durchstreichen und keinen Text setzen nur Symbol
+
         //* Ricebar 
-        this.avaibleRice = 0;
+        this.avaibleRice = 5;
         this.ricebowlIcon = this.add.image(config.width - 70, 95, "ricebowl");
         this.ricebowlIcon.setOrigin(0, 0);
         this.ricebowlIcon.setDepth(10);
         this.ricebowlIcon.setScrollFactor(0);
-        this.riceCount = this.add.text(config.width - 75, 100, "", {
+        this.riceCount = this.add.text(config.width - 75, 100, "5", {
             font: "65px Arial",
             fill: "#000000",
 
@@ -165,7 +165,7 @@ class Scene2 extends Phaser.Scene {
         //#region  //! Enemies (OLD Guy && Girl && Wasabi)
         //* Boy
         //TODO Anpassen des Spawnpunktes für das Spiel
-        this.boy = this.physics.add.sprite(config.width + 1000, 100, "boy").setScale(1.75);
+        this.boy = this.physics.add.sprite(5000, 100, "boy").setScale(1.75);
         this.boy.setOrigin(0, 0);
         this.boy.setDepth(20);
         this.boy.setImmovable(true);
@@ -178,7 +178,7 @@ class Scene2 extends Phaser.Scene {
 
         //* Girl
         //TODO Anpassen des Spawnpunktes für das Spiel
-        this.girl = this.physics.add.sprite(config.width - 200, 100, "girl").setScale(1.75);
+        this.girl = this.physics.add.sprite(2000, 100, "girl").setScale(1.75);
         this.girl.setOrigin(1, 0);
         this.girl.setDepth(10);
         this.girl.setImmovable(true);
@@ -209,11 +209,8 @@ class Scene2 extends Phaser.Scene {
         });
 
         //* Game end
-
         this.onibaby = this.physics.add.sprite(7200, 650, "onibaby");
         this.onibaby.play("onibaby_anim");
-
-
 
         //#endregion
 
@@ -221,32 +218,30 @@ class Scene2 extends Phaser.Scene {
 
         this.ricebowl = this.physics.add.group({
             key: "ricebowl",
-            repeat: 2,
+            repeat: 1,
         });
         this.ricebowl.children.iterate(child => {
             this.physics.add.collider(child, this.ground);
-            child.x = Phaser.Math.Between(500, 2000);
+            child.x = Phaser.Math.Between(2000, 4000);
             child.y = 668;
             child.setImmovable(true);
-            console.log("child x" + child.x);
         });
+
         this.riceballs = this.physics.add.group({
             allowGravity: false,
             velocityX: 400,
             velocityY: 10
         });
 
-
-
         //* Jump Boost
         this.pwrJump = this.physics.add.group({
             key: "2x",
-            repeat: 0,
+            repeat: 1,
             allowGravity: false,
         });
         this.pwrJump.children.iterate(child => {
             this.physics.add.collider(child, this.ground);
-            child.x = Phaser.Math.Between(500, 1000);
+            child.x = Phaser.Math.Between(500, 45000);
             child.y = 550;
             child.setImmovable(true);
             child.play("hoverJumpBoost_anim");
@@ -255,11 +250,8 @@ class Scene2 extends Phaser.Scene {
         this.jumpBoost = false;
         this.avaibleBoostJump = 0;
         this.physics.add.overlap(this.player, this.pwrJump, this.takePwrJumpBoost, null, this);
-
-
-
-
         //#endregion
+
 
         //#region //! Collider & Overlapping (between Player and Enemies and other Objects)
 
@@ -280,7 +272,7 @@ class Scene2 extends Phaser.Scene {
 
         //* Onibaby
         this.physics.add.collider(this.onibaby, this.ground);
-        this.physics.add.overlap(this.player, this.onibaby, this.gamend, null, this);
+        this.physics.add.overlap(this.player, this.onibaby, this.gamEnd, null, this);
 
         //* Riceballs
         this.physics.add.collider(this.ground, this.riceballs, this.riceballHitGround, null, this);
@@ -635,21 +627,21 @@ class Scene2 extends Phaser.Scene {
 
     chopstickHitPlayer(player, chopstick) {
         chopstick.destroy();
-        this.hpValue--;
+        this.hpValue -= 2;
         this.controlHp(this.hpValue);
 
     }
 
     soyfishHitPlayer(player, soyfish) {
         soyfish.destroy();
-        this.hpValue--;
+        this.hpValue -= 2;
         this.controlHp(this.hpValue);
 
     }
     ricebowlHit(player, ricebowl) {
         ricebowl.destroy();
         console.log("Ricebowl aufgehoben");
-        this.avaibleRice += 7;
+        this.avaibleRice += 5;
         this.pickupRicebowl.play(this.hitSoundConfig);
         if (this.avaibleRice == 0) {
             this.riceCount.setText("");
@@ -770,7 +762,7 @@ class Scene2 extends Phaser.Scene {
     controlEnemy() {
         this.wasabiSpawntime++;
 
-        if (this.wasabiSpawntime / 60 > 7 && !this.playerDead) {
+        if (this.wasabiSpawntime / 60 > 5 && !this.playerDead) {
             this.wasabiSpawntime = 0;
             this.spawnWasabi();
         }
@@ -811,7 +803,7 @@ class Scene2 extends Phaser.Scene {
     //#endregion    
 
 
-    gamend() {
+    gamEnd() {
         this.mainMusic.stop();
         this.playerWIN = true;
     }
