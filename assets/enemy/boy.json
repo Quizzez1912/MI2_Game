@@ -8,7 +8,7 @@
     "duration": 100
    },
    "1": {
-    "frame": { "x": 80, "y": 0, "w": 80, "h": 128 },
+    "frame": { "x": 85, "y": 0, "w": 80, "h": 128 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 80, "h": 128 },
@@ -16,7 +16,7 @@
     "duration": 100
    },
    "2": {
-    "frame": { "x": 160, "y": 0, "w": 80, "h": 128 },
+    "frame": { "x": 170, "y": 0, "w": 80, "h": 128 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 80, "h": 128 },
@@ -24,7 +24,7 @@
     "duration": 100
    },
    "3": {
-    "frame": { "x": 240, "y": 0, "w": 80, "h": 128 },
+    "frame": { "x": 255, "y": 0, "w": 80, "h": 128 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 80, "h": 128 },
@@ -37,14 +37,7 @@
   "version": "1.2.18-x64",
   "image": "boy.png",
   "format": "RGBA8888",
-  "size": { "w": 320, "h": 128 },
-  "scale": "1",
-  "frameTags": [
-  ],
-  "layers": [
-   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
-  ],
-  "slices": [
-  ]
+  "size": { "w": 335, "h": 128 },
+  "scale": "1"
  }
 }

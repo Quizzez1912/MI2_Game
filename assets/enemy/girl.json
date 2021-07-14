@@ -8,7 +8,7 @@
     "duration": 100
    },
    "1": {
-    "frame": { "x": 73, "y": 0, "w": 73, "h": 125 },
+    "frame": { "x": 78, "y": 0, "w": 73, "h": 125 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 73, "h": 125 },
@@ -16,7 +16,7 @@
     "duration": 100
    },
    "2": {
-    "frame": { "x": 146, "y": 0, "w": 73, "h": 125 },
+    "frame": { "x": 156, "y": 0, "w": 73, "h": 125 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 73, "h": 125 },
@@ -24,7 +24,7 @@
     "duration": 100
    },
    "3": {
-    "frame": { "x": 219, "y": 0, "w": 73, "h": 125 },
+    "frame": { "x": 234, "y": 0, "w": 73, "h": 125 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 73, "h": 125 },
@@ -32,7 +32,7 @@
     "duration": 100
    },
    "4": {
-    "frame": { "x": 292, "y": 0, "w": 73, "h": 125 },
+    "frame": { "x": 312, "y": 0, "w": 73, "h": 125 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 73, "h": 125 },
@@ -45,14 +45,7 @@
   "version": "1.2.18-x64",
   "image": "girl.png",
   "format": "RGBA8888",
-  "size": { "w": 365, "h": 125 },
-  "scale": "1",
-  "frameTags": [
-  ],
-  "layers": [
-   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
-  ],
-  "slices": [
-  ]
+  "size": { "w": 385, "h": 125 },
+  "scale": "1"
  }
 }

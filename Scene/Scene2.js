@@ -116,7 +116,7 @@ class Scene2 extends Phaser.Scene {
         //* JumpBoost
         this.jumpBoostIcon = this.add.image(20, 10, "jumpBoostIcon").setScale(2);
         this.jumpBoostIcon.setOrigin(0, 0);
-        this.jumpBoostIcon.setDepth(10);
+        this.jumpBoostIcon.setDepth(40);
         this.jumpBoostIcon.setScrollFactor(0);
         this.jumpBoostIcon.setAlpha(0.25);
         //#endregion
@@ -236,12 +236,12 @@ class Scene2 extends Phaser.Scene {
         //* Jump Boost
         this.pwrJump = this.physics.add.group({
             key: "2x",
-            repeat: 1,
+            repeat: 0,
             allowGravity: false,
         });
         this.pwrJump.children.iterate(child => {
             this.physics.add.collider(child, this.ground);
-            child.x = Phaser.Math.Between(500, 45000);
+            child.x = Phaser.Math.Between(100, 4500);
             child.y = 550;
             child.setImmovable(true);
             child.play("hoverJumpBoost_anim");
@@ -508,6 +508,7 @@ class Scene2 extends Phaser.Scene {
 
             // 0 Herzen
             case 0:
+
                 console.log("DEINE LEBEN === " + hpValue);
                 this.hp.play("hp0_anim");
                 console.log("******TOT********");
@@ -515,6 +516,13 @@ class Scene2 extends Phaser.Scene {
                 this.playerIsDead();
                 break;
 
+            case -1:
+                console.log("DEINE LEBEN === " + hpValue);
+                this.hp.play("hp0_anim");
+                console.log("******TOT********");
+                this.playerHitSound.play(this.hitSoundConfig);
+                this.playerIsDead();
+                break;
 
 
 

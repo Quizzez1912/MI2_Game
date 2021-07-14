@@ -25,7 +25,7 @@ class Scene1 extends Phaser.Scene {
       frameHeight: 64
     });
 
-    this.load.image("showEnemies", "assets/pregame/enemies.png");
+    this.load.image("showEnemies", "assets/pregame/enemy.png");
 
 
 
@@ -313,10 +313,10 @@ class Scene1 extends Phaser.Scene {
     this.sushimaster = this.add.image(config.width / 2, config.height / 2 - 160, "sushimaster");
 
     //* Play Button
-    this.playButton = this.add.sprite(config.width / 2, config.height / 2, "playButton").setScale(0.9);
+    this.playButton = this.add.sprite(config.width / 2, config.height / 2, "playButton");
     this.playButton.play("playButton_anim");
 
-    this.showEnemies = this.add.image(10, 200, "showEnemies").setScale(0.85);
+    this.showEnemies = this.add.image(10, 270, "showEnemies").setScale(0.85);
     this.showEnemies.setOrigin(0, 0);
     //#endregion
 
@@ -352,7 +352,7 @@ class Scene1 extends Phaser.Scene {
 
     //! START SCENE2 SOFORT FÜR TESTZWECK
     //TODO TETSTS
-    //this.scene.start("playGame");
+    // this.scene.start("Win");
     // this.music.stop();
 
   }
