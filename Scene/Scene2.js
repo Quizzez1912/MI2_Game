@@ -60,6 +60,7 @@ class Scene2 extends Phaser.Scene {
         //#endregion
 
         //#region  //! Background Create (Parallax)
+
         // Add SKY layer               
         /*this.sky = this.add.tileSprite(0,0,game.config.width, game.config.height, "sky");
         this.sky.setOrigin(0,0);
