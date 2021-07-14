@@ -11,12 +11,23 @@ class Scene2 extends Phaser.Scene {
     create() {
 
         //#region  //!  Sounds and Music
+        this.playerHitSound = this.sound.add("playerHit");
         this.soyfishSound = this.sound.add("soyfishThrow");
         this.stickSound = this.sound.add("stickThrow");
-        this.enemyAreaSound = this.sound.add("enemyArea");
-
         this.shootRiceballSound = this.sound.add("shootRiceball");
-        //#endregion
+
+        this.enemyAreaSound = this.sound.add("enemyArea");
+        this.girlHitSound = this.sound.add("girlHit");
+        this.boyHitSound = this.sound.add("boyHit");
+
+        this.girlMusic = this.sound.add("girlMusic");
+        this.boyMusic = this.sound.add("boyMusic");
+
+        this.mainMusic = this.sound.add("mainMusic");
+
+        this.pickupRicebowl = this.sound.add("pickupRicebowl");
+        this.pickupJump = this.sound.add("pickupJump");
+
 
         const throwSoundConfig = {
             mute: false,
@@ -29,6 +40,16 @@ class Scene2 extends Phaser.Scene {
         }
         const enemySoundConfig = {
             mute: false,
+            volume: 0.5,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: false,
+            delay: 0
+        }
+
+        const hitSoundConfig = {
+            mute: false,
             volume: 0.3,
             rate: 1,
             detune: 0,
@@ -37,6 +58,18 @@ class Scene2 extends Phaser.Scene {
             delay: 0
         }
 
+        const musicConfig = {
+            mute: false,
+            volume: 0.6,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay: 0
+        }
+
+
+        //#endregion
 
         //#region //! UI Create
 
@@ -94,8 +127,6 @@ class Scene2 extends Phaser.Scene {
         this.mountain.setOrigin(0, 0);
         this.mountain.setScrollFactor(0);
 
-
-
         this.tree = this.add.tileSprite(0, 0, 6000, 750, "tree");
         this.tree.setOrigin(0, 1);
         this.tree.setScrollFactor(0);
@@ -109,7 +140,7 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.existing(this.ground);
         this.ground.body.setCollideWorldBounds(true);
         //#endregion 
-        //TODO ADJUST WIDTH
+
         //#region   //! World Physics 
         this.physics.world.gravity.y = 400;
         this.physics.world.bounds.width = 7400;
@@ -131,7 +162,7 @@ class Scene2 extends Phaser.Scene {
         //#region  //! Enemies (OLD Guy && Girl && Wasabi)
         //* Boy
         //TODO Anpassen des Spawnpunktes für das Spiel
-        this.boy = this.physics.add.sprite(config.width, 100, "boy").setScale(1.75);
+        this.boy = this.physics.add.sprite(config.width + 1000, 100, "boy").setScale(1.75);
         this.boy.setOrigin(0, 0);
         this.boy.setDepth(20);
         this.boy.setImmovable(true);
@@ -244,6 +275,8 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.overlap(this.wasabiGroup, this.riceballs, this.riceballHitGround, null, this);
         this.physics.add.collider(this.girl, this.riceballs, this.playerHitGirl, null, this);
         this.physics.add.collider(this.boy, this.riceballs, this.playerHitBoy, null, this);
+        this.physics.add.overlap(this.riceballs, this.chopsticks, this.riceballGetHit, null, this);
+        this.physics.add.overlap(this.riceballs, this.soyfishs, this.riceballGetHit, null, this);
 
         //* Wasabi
         this.physics.add.collider(this.wasabiGroup, this.ground);
@@ -274,25 +307,11 @@ class Scene2 extends Phaser.Scene {
 
         //#endregion
 
-
-        //#region //? BRAUCHT MAN DAS ???? TIMER 
-        //? BRAUCHT MAN DAS ????
-        /*
-        this.minutes = 0;
-        this.time = 0;
-        this.timeCount = this.add.text(20,10, "0",{
-            font: "65px Arial",
-            fill: "#000000",
-                
-        });
-        this.timeCount.setOrigin(0,0);
-        this.timeCount.setScrollFactor(0);
-*/
-        //#endregion
-
+        this.mainMusic.play(this.musicConfig);
 
         //! TESTBEFEHLE FÜR DEBUGGIN
     }
+
 
     //! Update 
     update() {
@@ -349,22 +368,16 @@ class Scene2 extends Phaser.Scene {
             console.log("Vor dem Abschießen noch " + this.avaibleRice + " Reisbaelle übrig");
 
             if (this.avaibleRice > 0) {
+
                 this.shootRiceball();
                 this.avaibleRice--;
+
                 if (this.avaibleRice == 0) {
                     this.riceCount.setText("");
                 } else {
                     this.riceCount.setText(this.avaibleRice);
                 }
-
             }
-
-            //? BRAUCH MAN DAS NOCH=???
-            //* Interiert durch alle child Objekte einer Group und rufen Update auf bei jedem Child
-            /*for(var i = 0; i < this.riceballs.getChildren().length; i++){
-                this.riceball = this.riceballs.getChildren()[i];
-                this.riceball.update();
-              }  */
 
         }
         //TODO ZUM DEBUGGEN muss entfernt werden 
@@ -409,6 +422,15 @@ class Scene2 extends Phaser.Scene {
 
     //! EVENTMANAGER
     eventManager() {
+    
+    this.wasabiSpawntime++;
+
+        if (this.wasabiSpawntime / 60 > 5 && !this.playerDead) {
+            this.wasabiSpawntime = 0;
+            this.spawnWasabi();
+        }
+
+       
         if (this.avaibleRice == 0) {
             this.ricebowlIcon.alpha = 0.5;
 
@@ -440,30 +462,35 @@ class Scene2 extends Phaser.Scene {
                 console.log("DEINE LEBEN === " + hpValue);
                 this.hp.play("hp5_anim");
                 this.player.play("playerhit_anim");
+                this.playerHitSound.play(this.hitSoundConfig);
                 break;
 
             // 2 Herzen
             case 4:
                 console.log("DEINE LEBEN === " + hpValue);
                 this.hp.play("hp4_anim");
+                this.playerHitSound.play(this.hitSoundConfig);
                 break;
 
             // 1.5 Herzen
             case 3:
                 console.log("DEINE LEBEN === " + hpValue);
                 this.hp.play("hp3_anim");
+                this.playerHitSound.play(this.hitSoundConfig);
                 break;
 
             // 1 Herz
             case 2:
                 console.log("DEINE LEBEN === " + hpValue);
                 this.hp.play("hp2_anim");
+                this.playerHitSound.play(this.hitSoundConfig);
                 break;
 
             // 0.5 Herzen
             case 1:
                 console.log("DEINE LEBEN === " + hpValue);
                 this.hp.play("hp1_anim");
+                this.playerHitSound.play(this.hitSoundConfig);
                 break;
 
             // 0 Herzen
@@ -471,6 +498,7 @@ class Scene2 extends Phaser.Scene {
                 console.log("DEINE LEBEN === " + hpValue);
                 this.hp.play("hp0_anim");
                 console.log("******TOT********");
+                this.playerHitSound.play(this.hitSoundConfig);
                 this.playerIsDead();
                 break;
 
@@ -516,7 +544,9 @@ class Scene2 extends Phaser.Scene {
                 this.girl.active = false;
                 this.girl.destroy();
                 this.bosshpGirl.destroy();
-                //TODO ADD Fight Win Sound
+                this.girlMusic.stop();
+                this.mainMusic.play(this.musicConfig);
+
                 break;
         }
 
@@ -558,7 +588,8 @@ class Scene2 extends Phaser.Scene {
                 this.boy.active = false;
                 this.boy.destroy();
                 this.bosshpBoy.destroy();
-                //TODO ADD Fight Win Sound
+                this.boyMusic.stop();
+                this.mainMusic.play(this.musicConfig);
                 break;
 
 
@@ -579,6 +610,8 @@ class Scene2 extends Phaser.Scene {
     wasabiGetHit(wasabi, ricebowl) {
         wasabi.destroy();
     }
+
+
 
     chopstickHitPlayer(player, chopstick) {
         chopstick.destroy();
@@ -617,9 +650,14 @@ class Scene2 extends Phaser.Scene {
         riceball.destroy();
     }
 
+    riceballGetHit(riceball, enemyweapon) {
+        riceball.destroy();
+    }
+
     playerHitGirl(girl, riceball) {
         riceball.destroy();
         this.bosshpGirlValue--;
+        this.girlHitSound.play(this.throwSoundConfig);
         this.controlBossHpGirl(this.bosshpGirlValue);
         console.log(this.bosshpGirlValue + "BOSS LEBEN ÜBRIG")
     }
@@ -627,6 +665,7 @@ class Scene2 extends Phaser.Scene {
     playerHitBoy(boy, riceball) {
         riceball.destroy();
         this.bosshpBoyValue--;
+        this.boyHitSound.play(this.throwSoundConfig);
         this.controlBossHpBoy(this.bosshpBoyValue);
         console.log(this.bosshpBoyValue + "BOSS LEBEN ÜBRIG")
     }
@@ -635,16 +674,12 @@ class Scene2 extends Phaser.Scene {
         this.hpValue = 0;
         this.controlHp(this.hpValue);
         this.player.setX(this.player.x - 30);
-
-
     }
 
     playerCollideBoy(boy, player) {
         this.hpValue = 0;
         this.controlHp(this.hpValue);
         this.player.setX(this.player.x - 30);
-
-
     }
 
     playerIsDead() {
@@ -656,6 +691,9 @@ class Scene2 extends Phaser.Scene {
             this.playerDead = true;
             this.girlActive = false;
             this.boyActive = false;
+            this.mainMusic.stop();
+            this.girlMusic.stop();
+            this.boyMusic.stop();
 
         }
 
@@ -678,11 +716,11 @@ class Scene2 extends Phaser.Scene {
     enemyActivGirl() {
         if (!this.girlAppearSound) {
             this.enemyAreaSound.play(this.enemySoundConfig);
+            this.mainMusic.stop();
+            this.girlMusic.play(this.musicConfig);
             this.girlAppearSound = true;
-
         }
         //console.log("ACTIVE GIRL")
-
         this.avaibleChopstick = 100;
         this.girlActive = true;
         this.bosshpGirl.setDepth(10);
@@ -691,11 +729,11 @@ class Scene2 extends Phaser.Scene {
     enemyActivBoy() {
         if (!this.boyAppearSound) {
             this.enemyAreaSound.play(this.enemySoundConfig);
+            this.mainMusic.stop();
+            this.boyMusic.play(this.musicConfig);
             this.boyAppearSound = true;
 
         }
-
-
         //  console.log("ACTIVE BOY")
         this.avaibleSoyfish = 100;
         this.boyActive = true;
@@ -738,7 +776,7 @@ class Scene2 extends Phaser.Scene {
     //#endregion
 
 
-    //#region //! Take Powerups
+    //#region //! Take Powerup
     takePwrJumpBoost(player, jumpBoost) {
         jumpBoost.destroy();
         this.jumpBoost = true;

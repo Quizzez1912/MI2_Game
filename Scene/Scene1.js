@@ -11,7 +11,7 @@ class Scene1 extends Phaser.Scene {
     // Background
     this.load.image("background", "assets/pregame/pregamebackground.png");
     // Controls
-    this.load.image("controls", "assets/pregame/controls.png");
+    this.load.image("controls", "assets/pregame/playerControls.png");
     // Title
     this.load.image("sushimaster", "assets/pregame/sushimasterLogo.png")
     // PlayButton Spritesheet
@@ -73,35 +73,47 @@ class Scene1 extends Phaser.Scene {
 
     //#endregion
 
-    //* Music und Soundeffekte
-    // Hintergrundmusik
-    //? ÄNDERN this.load.audio("music","sounds/sci-fi_platformer12.mp3");
-    this.load.audio("soyfishThrow", "sounds/soyfishThrow22.wav");
-    this.load.audio("stickThrow", "sounds/stickThrow.wav");
-    this.load.audio("enemyArea", "sounds/enemyArea.wav")
-    this.load.audio("shootRiceball", "sounds/shootRiceball.wav")
+    //! Music und Soundeffekte
+    //* Main Menu
+    this.load.audio("menuMusic", "sounds/mainMenu.mp3");
 
-    //TODO SOUNDSA HINZUFÜGEN FÜR GIRL HIT BOY HIT PLAYERHIT und BG MUSIC
+    //* Game
+    this.load.audio("playerHit", "sounds/playerHit.mp3")
+    this.load.audio("soyfishThrow", "sounds/soyfishThrow22.mp3");
+    this.load.audio("stickThrow", "sounds/stickThrow.mp3");
+    this.load.audio("shootRiceball", "sounds/shootRiceball.mp3")
+
+    this.load.audio("enemyArea", "sounds/enemyArea.mp3")
+    this.load.audio("girlHit", "sounds/girlHit.mp3")
+    this.load.audio("boyHit", "sounds/boyHit.mp3")
+    this.load.audio("girlMusic", "sounds/girlMusic.mp3")
+    this.load.audio("boyMusic", "sounds/boyMusic.mp3")
+
+    this.load.audio("mainMusic", "sounds/mainMusic.mp3")
+
+    this.load.audio("pickupRicebowl", "sounds/collectBowl.mp3")
+    this.load.audio("pickupJump", "sounds/collectJumpboost.mp3")
+
   }
 
   create() {
 
     //#region  //! MusicButton
     this.MusicButton = this.add.sprite(config.width - 100, config.height / 2 - 300, "music");
-    //? ÄNDERN  this.music = this.sound.add("music");
+    this.music = this.sound.add("menuMusic");
     var allowMusic = true;
 
     var musicConfig = {
       mute: false,
-      volume: 0.1,
+      volume: 0.5,
       rate: 1,
       detune: 0,
       seek: 0,
-      loop: false,
+      loop: true,
       delay: 0
     }
 
-    //?SPÄTER AKTIVIEREN this.music.play(musicConfig);
+    this.music.play(musicConfig);
 
     //#endregion
 
@@ -282,20 +294,14 @@ class Scene1 extends Phaser.Scene {
     this.background.setDepth(-10);
 
     //* Controls Instruction
-    this.controls = this.add.image(200, config.height - 100, "controls").setScale(0.5);
-
+    this.controls = this.add.image(config.width - 320, 120, "controls").setScale(0.25);
+    this.controls.setOrigin(0, 0);
     //* Game Title
-    this.sushimaster = this.add.image(config.width / 2, config.height / 2 - 200, "sushimaster");
+    this.sushimaster = this.add.image(config.width / 2, config.height / 2 - 160, "sushimaster");
 
     //* Play Button
-    this.playButton = this.add.sprite(config.width / 2, config.height / 2, "playButton");
+    this.playButton = this.add.sprite(config.width / 2, config.height / 2, "playButton").setScale(0.9);
     this.playButton.play("playButton_anim");
-
-    //* PowerUps
-    this.jumpIcon = this.add.image(10, 100, "jumpBoostIcon").setScale(2);
-    this.jumpIcon.setOrigin(0, 0);
-    this.jumpIcon.setDepth(10);
-
 
     //#endregion
 
@@ -305,11 +311,11 @@ class Scene1 extends Phaser.Scene {
     this.MusicButton.setInteractive({ cursor: "pointer" });     // Cursor Symbol ändern
     this.MusicButton.on("pointerdown", () => {
       if (allowMusic) {
-        //?this.music.stop();
+        this.music.pause();
         allowMusic = false;
         this.MusicButton.play("musicOff_anim")
       } else {
-        //?  this.music.play(musicConfig);
+        this.music.resume(musicConfig);
         allowMusic = true;
         this.MusicButton.play("musicOn_anim")
       }
@@ -318,6 +324,7 @@ class Scene1 extends Phaser.Scene {
     //* Play Button
     this.playButton.setInteractive({ cursor: "pointer" });     // Cursor Symbol ändern
     this.playButton.on("pointerdown", () => {
+      this.music.stop();
       this.scene.start("playGame");
       //allowMusic = false;
 
@@ -329,7 +336,7 @@ class Scene1 extends Phaser.Scene {
 
     //! START SCENE2 SOFORT FÜR TESTZWECK
     //TODO TETSTS
-    this.scene.start("playGame");
+    //this.scene.start("playGame");
   }
 
   update() {
