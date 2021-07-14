@@ -9,26 +9,24 @@ class Scene1 extends Phaser.Scene {
 
     //#region //! Preload für StartScene (Background Controls Gametitle MusicIcon PlayButton)
     // Background
-    this.load.image("background", "assets/spritesheets/pregame/background.png");
+    this.load.image("background", "assets/pregame/pregamebackground.png");
     // Controls
-    this.load.image("controls", "assets/spritesheets/pregame/controls.png");
+    this.load.image("controls", "assets/pregame/controls.png");
     // Title
-    this.load.image("sushimaster", "assets/spritesheets/pregame/sushimasterLogo.png")
+    this.load.image("sushimaster", "assets/pregame/sushimasterLogo.png")
     // PlayButton Spritesheet
-    this.load.spritesheet("playButton", "assets/spritesheets/pregame/playButton.png", {
+    this.load.spritesheet("playButton", "assets/pregame/playButton.png", {
       frameWidth: 285,
       frameHeight: 134
     });
     // Music Icon Spritesheet
-    this.load.spritesheet("music", "assets/spritesheets/pregame/music.png", {
+    this.load.spritesheet("music", "assets/pregame/music.png", {
       frameWidth: 128,
       frameHeight: 64
     });
 
 
 
-
-    //Shield
 
 
     //#endregion
@@ -39,7 +37,7 @@ class Scene1 extends Phaser.Scene {
     this.load.image("sky", "assets/sky2.png");
     this.load.image("mountain", "assets/mountain_bg.png")
     this.load.image("tree", "assets/tree.png");
-    this.load.image("ground", "assets/street.png");
+    this.load.image("ground", "assets/ground.png");
 
 
     //* Object Spritesheets & Atlas
@@ -49,9 +47,6 @@ class Scene1 extends Phaser.Scene {
     // PowerUP JumpBoost
     this.load.atlas("atlas_jumpBoost", "assets/spritesheets/game/powerups/jumpBoost.png", "assets/spritesheets/game/powerups/jumpBoost.json");
     this.load.image("jumpBoostIcon", "assets/spritesheets/game/powerups/jumpBoostIcon.png");
-
-    // Shield
-    this.load.atlas("shield", "assets/spritesheets/game/powerups/shield.png", "assets/spritesheets/game/powerups/shield.json");
 
     // Rice-ball
     this.load.image("ricebowl", "assets/spritesheets/game/ricebowl1.png");
@@ -72,7 +67,7 @@ class Scene1 extends Phaser.Scene {
 
     //* UI Elemente
     // Lebensanzeige
-    this.load.atlas("hp", "assets/spritesheets/UI/hp.png", "assets/spritesheets/UI/hp.json");
+    this.load.atlas("hp", "assets/UI/hp.png", "assets/UI/hp.json");
 
     // Bossbar
     this.load.atlas("bosshp", "assets/enemy/bosshp.png", "assets/enemy/bosshp.json");
@@ -119,15 +114,6 @@ class Scene1 extends Phaser.Scene {
       repeat: -1
     });
 
-    this.anims.create({
-      key: "shield_anim",
-      frames: this.anims.generateFrameNumbers("shield", {
-        start: 0,
-        end: 1,
-      }),
-      frameRate: 3,
-      repeat: -1
-    });
 
     //* MusicButon
     this.anims.create({
@@ -284,11 +270,6 @@ class Scene1 extends Phaser.Scene {
     this.jumpIcon.setOrigin(0, 0);
     this.jumpIcon.setDepth(10);
 
-    this.ShieldIcon = this.add.image(10, 200, "shield");
-    this.ShieldIcon.setOrigin(0, 0);
-    this.ShieldIcon.setDepth(10);
-
-
 
     //#endregion
 
@@ -321,8 +302,8 @@ class Scene1 extends Phaser.Scene {
 
 
     //! START SCENE2 SOFORT FÜR TESTZWECK
-
-    this.scene.start("playGame");
+    //TODO TETSTS
+    //this.scene.start("playGame");
   }
 
   update() {
