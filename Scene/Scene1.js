@@ -34,10 +34,10 @@ class Scene1 extends Phaser.Scene {
     //#region  //! Preload für das Game (Assets / Atlas)
 
     //* Hintergrund für das Spiel ( Parallax)
-    this.load.image("sky", "assets/sky2.png");
-    this.load.image("mountain", "assets/mountain_bg.png")
-    this.load.image("tree", "assets/tree.png");
-    this.load.image("ground", "assets/ground.png");
+    this.load.image("sky", "assets/gameBackground/sky2.png");
+    this.load.image("mountain", "assets/gameBackground/mountain_bg.png")
+    this.load.image("tree", "assets/gameBackground/tree.png");
+    this.load.image("ground", "assets/gameBackground/streetold.png");
 
 
     //* Object Spritesheets & Atlas
@@ -303,7 +303,7 @@ class Scene1 extends Phaser.Scene {
 
     //! START SCENE2 SOFORT FÜR TESTZWECK
     //TODO TETSTS
-    //this.scene.start("playGame");
+    this.scene.start("playGame");
   }
 
   update() {

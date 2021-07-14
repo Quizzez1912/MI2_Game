@@ -67,29 +67,31 @@ class Scene2 extends Phaser.Scene {
         this.sky.setScrollFactor(0);
         */
 
-        this.mountain = this.add.tileSprite(0, 0, game.config.width, game.config.height, "mountain");
+        this.mountain = this.add.tileSprite(0, 0, 6000, game.config.height, "mountain");
         this.mountain.setOrigin(0, 0);
         this.mountain.setScrollFactor(0);
 
 
-        // tree Layer mit Höhe von 350 pixel
-        this.tree = this.add.tileSprite(0, 0, game.config.width, 1000, "tree");
+
+        this.tree = this.add.tileSprite(0, 0, 6000, 750, "tree");
         this.tree.setOrigin(0, 1);
         this.tree.setScrollFactor(0);
-        this.tree.y = game.config.height + 50;
+        this.tree.y = game.config.height - 30;
 
         // Ground Layer mit Höhe von 50px
-        this.ground = this.add.tileSprite(0, 1, game.config.width * 3, 50, "ground");
+        this.ground = this.add.tileSprite(0, 1, 7400, 50, "ground");
         this.ground.setOrigin(0, 1);
         this.ground.setScrollFactor(0);
         this.ground.y = game.config.height;
         this.physics.add.existing(this.ground);
         this.ground.body.setCollideWorldBounds(true);
         //#endregion 
-
-        //#region   //! World Physics
+        //TODO ADJUST WIDTH
+        //#region   //! World Physics 
         this.physics.world.gravity.y = 400;
-        this.physics.world.bounds.width = this.ground.width;
+        this.physics.world.bounds.width = 7400;
+
+
         //#endregion
 
         //#region //! Player definition and PlayerInputs
@@ -113,7 +115,7 @@ class Scene2 extends Phaser.Scene {
         this.boySpawntime = 0;
         this.boyActive = false;
         this.boy.dead = false;
-        console.log("x boy" + this.boy.x)
+        // console.log("x boy" + this.boy.x)
 
         //* Girl
         //TODO Anpassen des Spawnpunktes für das Spiel
@@ -124,7 +126,7 @@ class Scene2 extends Phaser.Scene {
         this.girlSpawntime = 0;
         this.girlActive = false;
         this.girl.dead = false;
-        console.log("x girl" + this.girl.x)
+        // console.log("x girl" + this.girl.x)
         //* Wasabi Group
         this.wasabiGroup = this.physics.add.group();
         this.wasabiSpawntime = 0;
@@ -149,7 +151,7 @@ class Scene2 extends Phaser.Scene {
 
         //#endregion
 
-        //#region  //!PickUP Ricebowl  + Powerups ( JumpBoost && Shield)
+        //#region  //!PickUP Ricebowl  + Powerup ( JumpBoost )
 
         this.ricebowl = this.physics.add.group({
             key: "ricebowl",
@@ -187,24 +189,6 @@ class Scene2 extends Phaser.Scene {
         this.avaibleBoostJump = 0;
         this.physics.add.overlap(this.player, this.pwrJump, this.takePwrJumpBoost, null, this);
 
-        //* Shield
-
-        this.pwrShield = this.physics.add.group({
-            key: "atlas_shield",
-            repeat: 0,
-            allowGravity: false,
-        });
-        this.pwrShield.children.iterate(child => {
-            this.physics.add.collider(child, this.ground);
-            child.x = Phaser.Math.Between(500, 1000);
-            child.y = 600;
-            child.setImmovable(true);
-            child.play("shield_anim");
-
-        });
-
-        this.pwrShield = false;
-        this.physics.add.overlap(this.player, this.pwrShield, this.takePwrShield, null, this);
 
 
 
@@ -253,7 +237,7 @@ class Scene2 extends Phaser.Scene {
 
         this.myCam = this.cameras.main;
         // Grenzen der Kamera festlegen hier = 3* der Configlänge
-        this.myCam.setBounds(0, 0, game.config.width * 3, game.config.height);
+        this.myCam.setBounds(0, 0, 7400, game.config.height);
         // Camera verfolgt den Spieler
         this.myCam.startFollow(this.player);
 
@@ -282,7 +266,7 @@ class Scene2 extends Phaser.Scene {
     //! Update 
     update() {
         //TODO für TEST ERSTMAL AUS
-        // console.log(this.player.x);
+        console.log(this.player.x);
         //? this.timeManager();
         this.movePlayerManager();
         this.eventManager();
@@ -290,8 +274,8 @@ class Scene2 extends Phaser.Scene {
 
         // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes Höher = schneller vorbeiziehen
         /* //? this.sky.tilePositionX = this.myCam.scrollX * .2;*/
-        this.mountain.tilePositionX = this.myCam.scrollX * .4;
-        this.tree.tilePositionX = this.myCam.scrollX * .6;
+        this.mountain.tilePositionX = this.myCam.scrollX * .5;
+        this.tree.tilePositionX = this.myCam.scrollX * .8;
         this.ground.tilePositionX = this.myCam.scrollX;
 
     }
@@ -328,7 +312,7 @@ class Scene2 extends Phaser.Scene {
 
             this.player.setVelocityX(-gameSettings.playerSpeed);
 
-        } else if (this.cursorKeys.right.isDown && this.player.x < game.config.width * 3 - 60) {
+        } else if (this.cursorKeys.right.isDown && this.player.x < 7400 - 60) {
             this.player.setVelocityX(gameSettings.playerSpeed);
 
 
@@ -421,15 +405,15 @@ class Scene2 extends Phaser.Scene {
 
         //* Active Girl Shooting
         if (this.player.x > (this.girl.x - 800) && !(this.girl.dead)) {
-            console.log(this.player.x);
-            console.log("girl active");
+            //  console.log(this.player.x);
+            // console.log("girl active");
             this.enemyActivGirl();
         }
 
         //* Active Boy Shooting
         if (this.player.x > (this.boy.x - 800) && !(this.boy.dead)) {
-            console.log(this.player.x);
-            console.log("boy active");
+            //   console.log(this.player.x);
+            // console.log("boy active");
             this.enemyActivBoy();
         }
     }
@@ -623,6 +607,16 @@ class Scene2 extends Phaser.Scene {
         this.controlBossHpBoy(this.bosshpBoyValue);
         console.log(this.bosshpBoyValue + "BOSS LEBEN ÜBRIG")
     }
+
+    playerCollideGirl(girl, player) {
+        this.hpValue = 0;
+    }
+
+    playerCollideBoy(boy, player) {
+        this.hpValue = 0;
+    }
+
+
     //#endregion
 
 
@@ -663,7 +657,7 @@ class Scene2 extends Phaser.Scene {
             this.girlSpawntime++;
 
             //TODO BALANCING
-            if (this.girlSpawntime / 60 > 3.5) {
+            if (this.girlSpawntime / 60 > 3.5 && !this.girl.dead) {
                 this.girlSpawntime = 0;
                 this.shootChopstick();
             }
@@ -673,7 +667,7 @@ class Scene2 extends Phaser.Scene {
             this.boySpawntime++;
 
             //TODO BALANCING
-            if (this.boySpawntime / 60 > 3.5) {
+            if (this.boySpawntime / 60 > 3.5 && !this.boy.dead) {
                 this.boySpawntime = 0;
                 this.shootSoyfish();
             }
@@ -693,12 +687,6 @@ class Scene2 extends Phaser.Scene {
         console.log("JumpBoost picked up!");
     }
 
-    //TODO not workin
-    takePwrShield(player, shield) {
-        shield.destroy();
-
-
-    }
 
     //#endregion    
 }
