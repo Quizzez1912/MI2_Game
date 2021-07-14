@@ -151,7 +151,7 @@ class Scene2 extends Phaser.Scene {
         //#region //! Player definition and PlayerInputs
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.player = this.physics.add.sprite(100, 718 - 100, "player");
+        this.player = this.physics.add.sprite(100, 618, "player");
         this.playerDead = false;
         this.playerWIN = false;
         this.riceballCooldown = 0;
@@ -200,16 +200,18 @@ class Scene2 extends Phaser.Scene {
         });
         this.soyfishs.setDepth(30);
 
+        //TODO BALANCEN
         //* Chopstick Group
         this.chopsticks = this.physics.add.group({
             allowGravity: false,
-            velocityX: -600,
-            velocityY: 80
+            velocityX: -650,
+            velocityY: 90
         });
 
         //* Game end
 
-        
+        this.onibaby = this.physics.add.sprite(7200, 650, "onibaby");
+        this.onibaby.play("onibaby_anim");
 
 
 
@@ -276,10 +278,13 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.wasabiGroup, this.wasabiHit, null, this);
         this.physics.add.overlap(this.player, this.ricebowl, this.ricebowlHit, null, this);
 
+        //* Onibaby
+        this.physics.add.collider(this.onibaby, this.ground);
+        this.physics.add.overlap(this.player, this.onibaby, this.gamend, null, this);
 
         //* Riceballs
         this.physics.add.collider(this.ground, this.riceballs, this.riceballHitGround, null, this);
-        this.physics.add.overlap(this.wasabiGroup, this.riceballs, this.riceballHitGround, null, this);
+        this.physics.add.overlap(this.riceballs, this.wasabiGroup, this.riceballHitWasabi, null, this);
         this.physics.add.collider(this.girl, this.riceballs, this.playerHitGirl, null, this);
         this.physics.add.collider(this.boy, this.riceballs, this.playerHitBoy, null, this);
         this.physics.add.overlap(this.riceballs, this.chopsticks, this.riceballGetHit, null, this);
@@ -318,6 +323,7 @@ class Scene2 extends Phaser.Scene {
 
 
         //! TESTBEFEHLE FÜR DEBUGGIN
+
     }
 
 
@@ -605,6 +611,7 @@ class Scene2 extends Phaser.Scene {
                 this.bosshpBoy.destroy();
                 this.boyMusic.stop();
                 this.mainMusic.play(this.musicConfig);
+                this.onibaby.play("onibaby_anim");
                 break;
 
 
@@ -642,7 +649,7 @@ class Scene2 extends Phaser.Scene {
     ricebowlHit(player, ricebowl) {
         ricebowl.destroy();
         console.log("Ricebowl aufgehoben");
-        this.avaibleRice += 5;
+        this.avaibleRice += 7;
         this.pickupRicebowl.play(this.hitSoundConfig);
         if (this.avaibleRice == 0) {
             this.riceCount.setText("");
@@ -664,6 +671,10 @@ class Scene2 extends Phaser.Scene {
         riceball.destroy();
     }
 
+    riceballHitWasabi(riceball, wasabi) {
+        riceball.destroy();
+        wasabi.destroy();
+    }
     riceballGetHit(riceball, enemyweapon) {
         riceball.destroy();
     }
@@ -759,27 +770,22 @@ class Scene2 extends Phaser.Scene {
     controlEnemy() {
         this.wasabiSpawntime++;
 
-        if (this.wasabiSpawntime / 60 > 15 && !this.playerDead) {
+        if (this.wasabiSpawntime / 60 > 7 && !this.playerDead) {
             this.wasabiSpawntime = 0;
             this.spawnWasabi();
         }
 
-
-
         if (this.girlActive) {
             this.girlShootTime++;
-
             //TODO BALANCING
             if (this.girlShootTime / 60 > 3 && !this.girlDead && !this.playerDead) {
                 this.girlShootTime = 0;
                 this.shootChopstick();
-
             }
         }
 
         if (this.boyActive) {
             this.boyShootTime++;
-
             //TODO BALANCING
             if (this.boyShootTime / 60 > 2.5 && !this.boyDead && !this.playerDead) {
                 this.boyShootTime = 0;
@@ -804,14 +810,11 @@ class Scene2 extends Phaser.Scene {
     }
     //#endregion    
 
-    gameEndLose() {
 
+    gamend() {
+        this.mainMusic.stop();
+        this.playerWIN = true;
     }
-
-    gameEndWin() {
-        this.scene.start("Win");
-    }
-
 
 }
 

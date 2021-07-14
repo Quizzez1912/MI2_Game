@@ -119,6 +119,18 @@ class Scene1 extends Phaser.Scene {
 
     //#region  //!Animationen 
 
+    //* ONi baby
+    this.anims.create({
+      key: "onibaby_anim",
+      frames: this.anims.generateFrameNumbers("onibaby", {
+        start: 0,
+        end: 1,
+      }),
+      frameRate: 6,
+      repeat: -1
+    });
+
+
     //* Pickups 
     this.anims.create({
       key: "hoverJumpBoost_anim",
@@ -326,6 +338,7 @@ class Scene1 extends Phaser.Scene {
     this.playButton.on("pointerdown", () => {
       this.music.stop();
       this.scene.start("playGame");
+      
       //allowMusic = false;
 
     });
@@ -338,7 +351,7 @@ class Scene1 extends Phaser.Scene {
     //TODO TETSTS
     //this.scene.start("playGame");
     // this.music.stop();
-    // this.scene.start("Lose");
+
   }
 
   update() {
