@@ -10,7 +10,36 @@ class Scene2 extends Phaser.Scene {
 
     create() {
 
+        //#region  //!  Sounds and Music
+        this.soyfishSound = this.sound.add("soyfishThrow");
+        this.stickSound = this.sound.add("stickThrow");
+        this.enemyAreaSound = this.sound.add("enemyArea");
+
+        this.shootRiceballSound = this.sound.add("shootRiceball");
+        //#endregion
+
+        const throwSoundConfig = {
+            mute: false,
+            volume: 0.1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: false,
+            delay: 0
+        }
+        const enemySoundConfig = {
+            mute: false,
+            volume: 0.3,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: false,
+            delay: 0
+        }
+
+
         //#region //! UI Create
+
 
         //* Healthbar
         this.hpValue = 6;
@@ -61,12 +90,6 @@ class Scene2 extends Phaser.Scene {
 
         //#region  //! Background Create (Parallax)
 
-        // Add SKY layer               
-        /*this.sky = this.add.tileSprite(0,0,game.config.width, game.config.height, "sky");
-        this.sky.setOrigin(0,0);
-        this.sky.setScrollFactor(0);
-        */
-
         this.mountain = this.add.tileSprite(0, 0, 6000, game.config.height, "mountain");
         this.mountain.setOrigin(0, 0);
         this.mountain.setScrollFactor(0);
@@ -76,7 +99,7 @@ class Scene2 extends Phaser.Scene {
         this.tree = this.add.tileSprite(0, 0, 6000, 750, "tree");
         this.tree.setOrigin(0, 1);
         this.tree.setScrollFactor(0);
-        this.tree.y = game.config.height - 30;
+        this.tree.y = game.config.height - 5;
 
         // Ground Layer mit Höhe von 50px
         this.ground = this.add.tileSprite(0, 1, 7400, 50, "ground");
@@ -97,7 +120,8 @@ class Scene2 extends Phaser.Scene {
         //#region //! Player definition and PlayerInputs
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.player = this.physics.add.image(100, 718 - 100, "player");
+        this.player = this.physics.add.sprite(100, 718 - 100, "player");
+        this.playerDead = false;
 
         // TODO test für soyfish und chopstick NOCH ENTFERNEN
         this.spacebarsoyfish = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -114,7 +138,8 @@ class Scene2 extends Phaser.Scene {
         this.boySpawntime = 0;
         this.boySpawntime = 0;
         this.boyActive = false;
-        this.boy.dead = false;
+        this.boyDead = false;
+        this.boyAppearSound = false;
         // console.log("x boy" + this.boy.x)
 
         //* Girl
@@ -125,7 +150,9 @@ class Scene2 extends Phaser.Scene {
         this.girl.setImmovable(true);
         this.girlSpawntime = 0;
         this.girlActive = false;
-        this.girl.dead = false;
+        this.girlDead = false;
+        this.girlAppearSound = false;
+
         // console.log("x girl" + this.girl.x)
         //* Wasabi Group
         this.wasabiGroup = this.physics.add.group();
@@ -155,13 +182,14 @@ class Scene2 extends Phaser.Scene {
 
         this.ricebowl = this.physics.add.group({
             key: "ricebowl",
-            repeat: 0,
+            repeat: 2,
         });
         this.ricebowl.children.iterate(child => {
             this.physics.add.collider(child, this.ground);
-            child.x = Phaser.Math.Between(500, 1000);
+            child.x = Phaser.Math.Between(500, 2000);
             child.y = 668;
             child.setImmovable(true);
+            console.log("child x" + child.x);
         });
         this.riceballs = this.physics.add.group({
             allowGravity: false,
@@ -180,7 +208,7 @@ class Scene2 extends Phaser.Scene {
         this.pwrJump.children.iterate(child => {
             this.physics.add.collider(child, this.ground);
             child.x = Phaser.Math.Between(500, 1000);
-            child.y = 520;
+            child.y = 550;
             child.setImmovable(true);
             child.play("hoverJumpBoost_anim");
         });
@@ -198,11 +226,11 @@ class Scene2 extends Phaser.Scene {
 
         //* Girl
         this.physics.add.collider(this.girl, this.ground);
-        this.physics.add.collider(this.girl, this.player);
+        this.physics.add.collider(this.girl, this.player, this.playerCollideGirl, null, this);
 
         //* Boy
         this.physics.add.collider(this.boy, this.ground);
-        this.physics.add.collider(this.boy, this.player);
+        this.physics.add.collider(this.boy, this.player, this.playerCollideBoy, null, this);
 
         //* Player
         this.physics.add.collider(this.player, this.ground);
@@ -219,6 +247,9 @@ class Scene2 extends Phaser.Scene {
 
         //* Wasabi
         this.physics.add.collider(this.wasabiGroup, this.ground);
+        this.physics.add.overlap(this.wasabiGroup, this.ricebowl, this.wasabiGetHit, null, this);
+        this.physics.add.overlap(this.wasabiGroup, this.chopsticks, this.wasabiGetHit, null, this);
+        this.physics.add.overlap(this.wasabiGroup, this.soyfishs, this.wasabiGetHit, null, this);
 
         //* Chopsticks
         this.physics.add.collider(this.ground, this.chopsticks, this.chopstickHitGround, null, this);
@@ -266,74 +297,51 @@ class Scene2 extends Phaser.Scene {
     //! Update 
     update() {
         //TODO für TEST ERSTMAL AUS
-        console.log(this.player.x);
+        // console.log(this.player.x);
         //? this.timeManager();
         this.movePlayerManager();
         this.eventManager();
         this.controlEnemy();
 
         // Schnelligkeit des Scrollens bzw. des vorbeiziehens des Hintergrundes Höher = schneller vorbeiziehen
-        /* //? this.sky.tilePositionX = this.myCam.scrollX * .2;*/
         this.mountain.tilePositionX = this.myCam.scrollX * .5;
         this.tree.tilePositionX = this.myCam.scrollX * .8;
         this.ground.tilePositionX = this.myCam.scrollX;
 
     }
 
-    //#region //! Timemanager
-
-    /*  timeManager(){
-         
-          this.time++;
-  
-          if (this.time/60 > 60){
-              this.minutes++;
-              this.time = 0;
-          }
-          if(this.minutes < 10){
-              this.minutesString = "0" + this.minutes.toString();
-          } else {
-              this.minutesString = this.minutes;    
-          }
-  
-          this.timeCount.setText(this.minutesString + "." + (this.time/60).toFixed(2));   
-          
-          
-      }*/
-
-    //#endregion
-
-
     //#region  //! Player Functions & Eventmanager
 
     //* Playermovement
     movePlayerManager() {
-        if (this.cursorKeys.left.isDown && this.player.x > 60) {
+        if (!this.playerDead) {
+            if (this.cursorKeys.left.isDown && this.player.x > 60) {
 
-            this.player.setVelocityX(-gameSettings.playerSpeed);
+                this.player.setVelocityX(-gameSettings.playerSpeed);
 
-        } else if (this.cursorKeys.right.isDown && this.player.x < 7400 - 60) {
-            this.player.setVelocityX(gameSettings.playerSpeed);
+            } else if (this.cursorKeys.right.isDown && this.player.x < 7400 - 60) {
+                this.player.setVelocityX(gameSettings.playerSpeed);
 
 
-        } else {
-            this.player.setVelocityX(0);
-        }
-        // Jump
-        if (this.cursorKeys.up.isDown && this.player.body.onFloor()) {
-            this.player.setVelocityY(-gameSettings.playerSpeed);
-
-        }
-        // Jump with Boost    
-        if (this.cursorKeys.up.isDown && this.player.body.onFloor() && this.jumpBoost) {
-            this.player.setVelocityY(-gameSettings.playerSpeed * 1.5);
-            this.avaibleBoostJump++;
-            if (this.avaibleBoostJump == 2) {
-                this.jumpBoost = false;
-                this.jumpBoostIcon.setAlpha(0.25);
+            } else {
+                this.player.setVelocityX(0);
             }
-            console.log(" jumpBoost JUMP schon benutzt == " + this.avaibleBoostJump)
+            // Jump
+            if (this.cursorKeys.up.isDown && this.player.body.onFloor()) {
+                this.player.setVelocityY(-gameSettings.playerSpeed);
 
+            }
+            // Jump with Boost    
+            if (this.cursorKeys.up.isDown && this.player.body.onFloor() && this.jumpBoost) {
+                this.player.setVelocityY(-gameSettings.playerSpeed * 1.5);
+                this.avaibleBoostJump++;
+                if (this.avaibleBoostJump == 2) {
+                    this.jumpBoost = false;
+                    this.jumpBoostIcon.setAlpha(0.25);
+                }
+                console.log(" jumpBoost JUMP schon benutzt == " + this.avaibleBoostJump)
+
+            }
         }
 
         //* Player shoot Riceball
@@ -377,17 +385,22 @@ class Scene2 extends Phaser.Scene {
     //#region //! ShootFunction
     shootRiceball() {
         var riceball = new Riceball(this);
+        this.shootRiceballSound.play(this.throwSoundConfig);
     }
 
     shootSoyfish() {
-        this.soyfish = new Soyfish(this);
-        this.boy.play("boy_anim");
+        if (!this.boyDead) {
+            this.soyfish = new Soyfish(this);
+            this.boy.play("boy_anim");
+            this.soyfishSound.play(this.throwSoundConfig);
+        }
     }
 
     shootChopstick() {
-        if (!this.girl.dead) {
+        if (!this.girlDead) {
             this.chopstick = new Chopstick(this);
             this.girl.play("girl_anim");
+            this.stickSound.play(this.throwSoundConfig);
         }
     }
 
@@ -404,14 +417,14 @@ class Scene2 extends Phaser.Scene {
         }
 
         //* Active Girl Shooting
-        if (this.player.x > (this.girl.x - 800) && !(this.girl.dead)) {
+        if (this.player.x > (this.girl.x - 800) && !(this.girlDead)) {
             //  console.log(this.player.x);
             // console.log("girl active");
             this.enemyActivGirl();
         }
 
         //* Active Boy Shooting
-        if (this.player.x > (this.boy.x - 800) && !(this.boy.dead)) {
+        if (this.player.x > (this.boy.x - 800) && !(this.boyDead)) {
             //   console.log(this.player.x);
             // console.log("boy active");
             this.enemyActivBoy();
@@ -426,6 +439,7 @@ class Scene2 extends Phaser.Scene {
             case 5:
                 console.log("DEINE LEBEN === " + hpValue);
                 this.hp.play("hp5_anim");
+                this.player.play("playerhit_anim");
                 break;
 
             // 2 Herzen
@@ -457,7 +471,12 @@ class Scene2 extends Phaser.Scene {
                 console.log("DEINE LEBEN === " + hpValue);
                 this.hp.play("hp0_anim");
                 console.log("******TOT********");
+                this.playerIsDead();
                 break;
+
+
+
+
         }
 
     }
@@ -493,7 +512,7 @@ class Scene2 extends Phaser.Scene {
                 console.log("Boss LEBEN === " + bosshpValueGirl);
                 this.bosshpGirl.play("bosshp0_anim");
                 console.log("******BOSS IST TOT********");
-                this.girl.dead = true;
+                this.girlDead = true;
                 this.girl.active = false;
                 this.girl.destroy();
                 this.bosshpGirl.destroy();
@@ -535,7 +554,7 @@ class Scene2 extends Phaser.Scene {
                 console.log("Boss LEBEN === " + bosshpValueBoy);
                 this.bosshpBoy.play("bosshp0_anim");
                 console.log("******BOSS IST TOT********");
-                this.boy.dead = true;
+                this.boyDead = true;
                 this.boy.active = false;
                 this.boy.destroy();
                 this.bosshpBoy.destroy();
@@ -557,6 +576,10 @@ class Scene2 extends Phaser.Scene {
 
     }
 
+    wasabiGetHit(wasabi, ricebowl) {
+        wasabi.destroy();
+    }
+
     chopstickHitPlayer(player, chopstick) {
         chopstick.destroy();
         this.hpValue--;
@@ -573,7 +596,7 @@ class Scene2 extends Phaser.Scene {
     ricebowlHit(player, ricebowl) {
         ricebowl.destroy();
         console.log("Ricebowl aufgehoben");
-        this.avaibleRice += 10;
+        this.avaibleRice += 5;
         if (this.avaibleRice == 0) {
             this.riceCount.setText("");
         } else {
@@ -610,10 +633,33 @@ class Scene2 extends Phaser.Scene {
 
     playerCollideGirl(girl, player) {
         this.hpValue = 0;
+        this.controlHp(this.hpValue);
+        this.player.setX(this.player.x - 30);
+
+
     }
 
     playerCollideBoy(boy, player) {
         this.hpValue = 0;
+        this.controlHp(this.hpValue);
+        this.player.setX(this.player.x - 30);
+
+
+    }
+
+    playerIsDead() {
+        if (!this.playerDead) {
+            this.player.setVelocityX(0);
+            this.player.setImmovable(true);
+            console.log("playerISDead");
+            this.player.play("playerdead_anim");
+            this.playerDead = true;
+            this.girlActive = false;
+            this.boyActive = false;
+
+        }
+
+
     }
 
 
@@ -630,14 +676,27 @@ class Scene2 extends Phaser.Scene {
     }
 
     enemyActivGirl() {
-        console.log("SPAWN GIRL")
+        if (!this.girlAppearSound) {
+            this.enemyAreaSound.play(this.enemySoundConfig);
+            this.girlAppearSound = true;
+
+        }
+        //console.log("ACTIVE GIRL")
+
         this.avaibleChopstick = 100;
         this.girlActive = true;
         this.bosshpGirl.setDepth(10);
     }
 
     enemyActivBoy() {
-        console.log("SPAWN GIRL")
+        if (!this.boyAppearSound) {
+            this.enemyAreaSound.play(this.enemySoundConfig);
+            this.boyAppearSound = true;
+
+        }
+
+
+        //  console.log("ACTIVE BOY")
         this.avaibleSoyfish = 100;
         this.boyActive = true;
         this.bosshpBoy.setDepth(10);
@@ -648,7 +707,7 @@ class Scene2 extends Phaser.Scene {
     controlEnemy() {
         this.wasabiSpawntime++;
 
-        if (this.wasabiSpawntime / 60 > 5) {
+        if (this.wasabiSpawntime / 60 > 5 && !this.playerDead) {
             this.wasabiSpawntime = 0;
             this.spawnWasabi();
         }
@@ -657,7 +716,7 @@ class Scene2 extends Phaser.Scene {
             this.girlSpawntime++;
 
             //TODO BALANCING
-            if (this.girlSpawntime / 60 > 3.5 && !this.girl.dead) {
+            if (this.girlSpawntime / 60 > 3.5 && !this.girlDead && !this.playerDead) {
                 this.girlSpawntime = 0;
                 this.shootChopstick();
             }
@@ -667,7 +726,7 @@ class Scene2 extends Phaser.Scene {
             this.boySpawntime++;
 
             //TODO BALANCING
-            if (this.boySpawntime / 60 > 3.5 && !this.boy.dead) {
+            if (this.boySpawntime / 60 > 3.5 && !this.boyDead && !this.playerDead) {
                 this.boySpawntime = 0;
                 this.shootSoyfish();
             }

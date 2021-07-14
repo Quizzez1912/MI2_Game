@@ -34,36 +34,35 @@ class Scene1 extends Phaser.Scene {
     //#region  //! Preload für das Game (Assets / Atlas)
 
     //* Hintergrund für das Spiel ( Parallax)
-    this.load.image("sky", "assets/gameBackground/sky2.png");
     this.load.image("mountain", "assets/gameBackground/mountain_bg.png")
     this.load.image("tree", "assets/gameBackground/tree.png");
-    this.load.image("ground", "assets/gameBackground/streetold.png");
+    this.load.image("ground", "assets/gameBackground/street.png");
 
 
     //* Object Spritesheets & Atlas
     // Player
-    this.load.image("player", "assets/spritesheets/game/oni1.png");
+    this.load.atlas("player", "assets/game/playerSprite.png", "assets/game/playerSprite.json");
 
     // PowerUP JumpBoost
-    this.load.atlas("atlas_jumpBoost", "assets/spritesheets/game/powerups/jumpBoost.png", "assets/spritesheets/game/powerups/jumpBoost.json");
-    this.load.image("jumpBoostIcon", "assets/spritesheets/game/powerups/jumpBoostIcon.png");
+    this.load.atlas("atlas_jumpBoost", "assets/game/powerups/jumpBoost.png", "assets/game/powerups/jumpBoost.json");
+    this.load.image("jumpBoostIcon", "assets/game/powerups/jumpBoostIcon.png");
 
     // Rice-ball
-    this.load.image("ricebowl", "assets/spritesheets/game/ricebowl1.png");
-    this.load.image("riceball", "assets/spritesheets/game/riceball_oni.png");
+    this.load.image("ricebowl", "assets/game/ricebowl1.png");
+    this.load.image("riceball", "assets/game/riceball_oni.png");
 
     // Girl
     this.load.atlas("girl", "assets/enemy/girl.png", "assets/enemy/girl.json");
     // Boy
     this.load.atlas("boy", "assets/enemy/boy.png", "assets/enemy/boy.json");
     // Wasabi
-    this.load.image("wasabi", "assets/spritesheets/game/wasabi.png");
+    this.load.image("wasabi", "assets/enemy/wasabi.png");
 
     // Soyfish
-    this.load.image("soyfish", "assets/spritesheets/game/soyfish.png");
+    this.load.image("soyfish", "assets/enemy/soyfish.png");
 
     // Chopstick
-    this.load.image("chopstick", "assets/spritesheets/game/chopstick.png");
+    this.load.image("chopstick", "assets/enemy/chopstick.png");
 
     //* UI Elemente
     // Lebensanzeige
@@ -77,7 +76,12 @@ class Scene1 extends Phaser.Scene {
     //* Music und Soundeffekte
     // Hintergrundmusik
     //? ÄNDERN this.load.audio("music","sounds/sci-fi_platformer12.mp3");
+    this.load.audio("soyfishThrow", "sounds/soyfishThrow22.wav");
+    this.load.audio("stickThrow", "sounds/stickThrow.wav");
+    this.load.audio("enemyArea", "sounds/enemyArea.wav")
+    this.load.audio("shootRiceball", "sounds/shootRiceball.wav")
 
+    //TODO SOUNDSA HINZUFÜGEN FÜR GIRL HIT BOY HIT PLAYERHIT und BG MUSIC
   }
 
   create() {
@@ -180,6 +184,28 @@ class Scene1 extends Phaser.Scene {
       frameRate: 8,
       repeat: 0
     });
+
+    //*DEAD ANIM
+
+    this.anims.create({
+      key: "playerdead_anim",
+      frames: [{ key: "player", frame: 2 },],
+      frameRate: 8,
+      repeat: 0
+    });
+
+
+
+    //*HIT ANIM
+
+    this.anims.create({
+      key: "playerhit_anim",
+      frames: [{ key: "player", frame: 1 },],
+      frameRate: 8,
+      repeat: 0
+    });
+
+
 
     //* BossHP
     //* Health UI 
