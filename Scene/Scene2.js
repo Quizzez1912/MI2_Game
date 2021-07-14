@@ -153,6 +153,9 @@ class Scene2 extends Phaser.Scene {
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.player = this.physics.add.sprite(100, 718 - 100, "player");
         this.playerDead = false;
+        this.playerWIN = false;
+        this.riceballCooldown = 0;
+        this.riceballOnCooldown = false;
 
         // TODO test für soyfish und chopstick NOCH ENTFERNEN
         this.spacebarsoyfish = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -166,7 +169,7 @@ class Scene2 extends Phaser.Scene {
         this.boy.setOrigin(0, 0);
         this.boy.setDepth(20);
         this.boy.setImmovable(true);
-        this.boySpawntime = 0;
+        this.boyShootTime = 0;
         this.boySpawntime = 0;
         this.boyActive = false;
         this.boyDead = false;
@@ -179,7 +182,7 @@ class Scene2 extends Phaser.Scene {
         this.girl.setOrigin(1, 0);
         this.girl.setDepth(10);
         this.girl.setImmovable(true);
-        this.girlSpawntime = 0;
+        this.girlShootTime = 0;
         this.girlActive = false;
         this.girlDead = false;
         this.girlAppearSound = false;
@@ -192,18 +195,21 @@ class Scene2 extends Phaser.Scene {
         //* Soyfish Group
         this.soyfishs = this.physics.add.group({
             allowGravity: false,
-            velocityX: -700,
-            velocityY: 90
+            velocityX: -750,
+            velocityY: 100
         });
         this.soyfishs.setDepth(30);
 
         //* Chopstick Group
         this.chopsticks = this.physics.add.group({
             allowGravity: false,
-            velocityX: -550,
-            velocityY: 70
+            velocityX: -600,
+            velocityY: 80
         });
 
+        //* Game end
+
+        
 
 
 
@@ -270,6 +276,7 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.wasabiGroup, this.wasabiHit, null, this);
         this.physics.add.overlap(this.player, this.ricebowl, this.ricebowlHit, null, this);
 
+
         //* Riceballs
         this.physics.add.collider(this.ground, this.riceballs, this.riceballHitGround, null, this);
         this.physics.add.overlap(this.wasabiGroup, this.riceballs, this.riceballHitGround, null, this);
@@ -309,15 +316,14 @@ class Scene2 extends Phaser.Scene {
 
         this.mainMusic.play(this.musicConfig);
 
+
         //! TESTBEFEHLE FÜR DEBUGGIN
     }
 
 
     //! Update 
     update() {
-        //TODO für TEST ERSTMAL AUS
-        // console.log(this.player.x);
-        //? this.timeManager();
+
         this.movePlayerManager();
         this.eventManager();
         this.controlEnemy();
@@ -367,10 +373,11 @@ class Scene2 extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
             console.log("Vor dem Abschießen noch " + this.avaibleRice + " Reisbaelle übrig");
 
-            if (this.avaibleRice > 0) {
-
+            if (this.avaibleRice > 0 && !this.riceballOnCooldown) {
                 this.shootRiceball();
                 this.avaibleRice--;
+                this.riceballOnCooldown = true;
+
 
                 if (this.avaibleRice == 0) {
                     this.riceCount.setText("");
@@ -384,7 +391,6 @@ class Scene2 extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.spacebarsoyfish)) {
             this.avaibleSoyfish = 100;
             this.shootSoyfish();
-
 
 
         }
@@ -416,22 +422,23 @@ class Scene2 extends Phaser.Scene {
             this.stickSound.play(this.throwSoundConfig);
         }
     }
-
     //#endregion
-
 
     //! EVENTMANAGER
     eventManager() {
-    
-    this.wasabiSpawntime++;
 
-        if (this.wasabiSpawntime / 60 > 5 && !this.playerDead) {
-            this.wasabiSpawntime = 0;
-            this.spawnWasabi();
+        if (this.riceballOnCooldown) {
+            this.riceballCooldown++;
+            console.log("riceballONCD COUNT ++ ");
+
+            if (this.riceballCooldown / 60 > 5) {
+                console.log("riceball COOLDOWN VORBEI");
+                this.riceballCooldown = 0;
+                this.riceballOnCooldown = false;
+            }
         }
 
-       
-        if (this.avaibleRice == 0) {
+        if (this.avaibleRice == 0 || this.riceballOnCooldown) {
             this.ricebowlIcon.alpha = 0.5;
 
         } else {
@@ -450,6 +457,14 @@ class Scene2 extends Phaser.Scene {
             //   console.log(this.player.x);
             // console.log("boy active");
             this.enemyActivBoy();
+        }
+
+        if (this.playerDead) {
+            this.scene.start("Lose");
+        }
+
+        if (this.playerWIN) {
+            this.scene.start("Win");
         }
     }
     //#endregion
@@ -611,8 +626,6 @@ class Scene2 extends Phaser.Scene {
         wasabi.destroy();
     }
 
-
-
     chopstickHitPlayer(player, chopstick) {
         chopstick.destroy();
         this.hpValue--;
@@ -630,6 +643,7 @@ class Scene2 extends Phaser.Scene {
         ricebowl.destroy();
         console.log("Ricebowl aufgehoben");
         this.avaibleRice += 5;
+        this.pickupRicebowl.play(this.hitSoundConfig);
         if (this.avaibleRice == 0) {
             this.riceCount.setText("");
         } else {
@@ -745,28 +759,32 @@ class Scene2 extends Phaser.Scene {
     controlEnemy() {
         this.wasabiSpawntime++;
 
-        if (this.wasabiSpawntime / 60 > 5 && !this.playerDead) {
+        if (this.wasabiSpawntime / 60 > 15 && !this.playerDead) {
             this.wasabiSpawntime = 0;
             this.spawnWasabi();
         }
 
+
+
         if (this.girlActive) {
-            this.girlSpawntime++;
+            this.girlShootTime++;
 
             //TODO BALANCING
-            if (this.girlSpawntime / 60 > 3.5 && !this.girlDead && !this.playerDead) {
-                this.girlSpawntime = 0;
+            if (this.girlShootTime / 60 > 3 && !this.girlDead && !this.playerDead) {
+                this.girlShootTime = 0;
                 this.shootChopstick();
+
             }
         }
 
         if (this.boyActive) {
-            this.boySpawntime++;
+            this.boyShootTime++;
 
             //TODO BALANCING
-            if (this.boySpawntime / 60 > 3.5 && !this.boyDead && !this.playerDead) {
-                this.boySpawntime = 0;
+            if (this.boyShootTime / 60 > 2.5 && !this.boyDead && !this.playerDead) {
+                this.boyShootTime = 0;
                 this.shootSoyfish();
+
             }
         }
 
@@ -782,12 +800,20 @@ class Scene2 extends Phaser.Scene {
         this.jumpBoost = true;
         this.jumpBoostIcon.setAlpha(1);
         console.log("JumpBoost picked up!");
+        this.pickupJump.play(this.hitSoundConfig);
+    }
+    //#endregion    
+
+    gameEndLose() {
+
+    }
+
+    gameEndWin() {
+        this.scene.start("Win");
     }
 
 
-    //#endregion    
 }
-
 
 
 

@@ -11,7 +11,7 @@ class Scene1 extends Phaser.Scene {
     // Background
     this.load.image("background", "assets/pregame/pregamebackground.png");
     // Controls
-    this.load.image("controls", "assets/pregame/playerControls.png");
+    this.load.image("controls", "assets/pregame/gameControl.png");
     // Title
     this.load.image("sushimaster", "assets/pregame/sushimasterLogo.png")
     // PlayButton Spritesheet
@@ -42,7 +42,7 @@ class Scene1 extends Phaser.Scene {
     //* Object Spritesheets & Atlas
     // Player
     this.load.atlas("player", "assets/game/playerSprite.png", "assets/game/playerSprite.json");
-
+    this.load.atlas("onibaby", "assets/game/onibaby.png", "assets/game/onibaby.json");
     // PowerUP JumpBoost
     this.load.atlas("atlas_jumpBoost", "assets/game/powerups/jumpBoost.png", "assets/game/powerups/jumpBoost.json");
     this.load.image("jumpBoostIcon", "assets/game/powerups/jumpBoostIcon.png");
@@ -337,6 +337,8 @@ class Scene1 extends Phaser.Scene {
     //! START SCENE2 SOFORT FÜR TESTZWECK
     //TODO TETSTS
     //this.scene.start("playGame");
+    // this.music.stop();
+    // this.scene.start("Lose");
   }
 
   update() {
