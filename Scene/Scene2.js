@@ -164,7 +164,7 @@ class Scene2 extends Phaser.Scene {
 
         //#region  //! Enemies (OLD Guy && Girl && Wasabi)
         //* Boy
-        //TODO Anpassen des Spawnpunktes für das Spiel
+        
         this.boy = this.physics.add.sprite(5000, 100, "boy").setScale(1.75);
         this.boy.setOrigin(0, 0);
         this.boy.setDepth(20);
@@ -174,10 +174,11 @@ class Scene2 extends Phaser.Scene {
         this.boyActive = false;
         this.boyDead = false;
         this.boyAppearSound = false;
+        
         // console.log("x boy" + this.boy.x)
 
         //* Girl
-        //TODO Anpassen des Spawnpunktes für das Spiel
+        
         this.girl = this.physics.add.sprite(2000, 100, "girl").setScale(1.75);
         this.girl.setOrigin(1, 0);
         this.girl.setDepth(10);
@@ -187,7 +188,7 @@ class Scene2 extends Phaser.Scene {
         this.girlDead = false;
         this.girlAppearSound = false;
 
-        // console.log("x girl" + this.girl.x)
+        
         //* Wasabi Group
         this.wasabiGroup = this.physics.add.group();
         this.wasabiSpawntime = 0;
@@ -200,7 +201,7 @@ class Scene2 extends Phaser.Scene {
         });
         this.soyfishs.setDepth(30);
 
-        //TODO BALANCEN
+        
         //* Chopstick Group
         this.chopsticks = this.physics.add.group({
             allowGravity: false,
@@ -777,7 +778,7 @@ class Scene2 extends Phaser.Scene {
 
         if (this.girlActive) {
             this.girlShootTime++;
-            //TODO BALANCING
+            
             if (this.girlShootTime / 60 > 3 && !this.girlDead && !this.playerDead) {
                 this.girlShootTime = 0;
                 this.shootChopstick();
@@ -786,7 +787,7 @@ class Scene2 extends Phaser.Scene {
 
         if (this.boyActive) {
             this.boyShootTime++;
-            //TODO BALANCING
+          
             if (this.boyShootTime / 60 > 2.5 && !this.boyDead && !this.playerDead) {
                 this.boyShootTime = 0;
                 this.shootSoyfish();
