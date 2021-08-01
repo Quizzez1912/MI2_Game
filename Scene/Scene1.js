@@ -112,7 +112,7 @@ class Scene1 extends Phaser.Scene {
 
     var musicConfig = {
       mute: false,
-      volume: 0.5,
+      volume: 0.7,
       rate: 1,
       detune: 0,
       seek: 0,
@@ -362,12 +362,6 @@ class Scene1 extends Phaser.Scene {
 
     //#endregion
 
-
-
-    //! START SCENE2 SOFORT FÜR TESTZWECK
-    //TODO TETSTS
-     this.scene.start("Win");
-    // this.music.stop();
 
   }
 

@@ -12,7 +12,7 @@ class SceneWin extends Phaser.Scene {
 
         var musicConfig = {
             mute: false,
-            volume: 0.5,
+            volume: 0.7,
             rate: 1,
             detune: 0,
             seek: 0,

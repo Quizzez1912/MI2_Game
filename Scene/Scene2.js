@@ -31,7 +31,7 @@ class Scene2 extends Phaser.Scene {
 
         const throwSoundConfig = {
             mute: false,
-            volume: 0.1,
+            volume: 0.3,
             rate: 1,
             detune: 0,
             seek: 0,
@@ -40,7 +40,7 @@ class Scene2 extends Phaser.Scene {
         }
         const enemySoundConfig = {
             mute: false,
-            volume: 0.5,
+            volume: 0.7,
             rate: 1,
             detune: 0,
             seek: 0,
@@ -50,7 +50,7 @@ class Scene2 extends Phaser.Scene {
 
         const hitSoundConfig = {
             mute: false,
-            volume: 0.3,
+            volume: 0.5,
             rate: 1,
             detune: 0,
             seek: 0,
@@ -60,7 +60,7 @@ class Scene2 extends Phaser.Scene {
 
         const musicConfig = {
             mute: false,
-            volume: 0.6,
+            volume: 0.8,
             rate: 1,
             detune: 0,
             seek: 0,
@@ -157,9 +157,6 @@ class Scene2 extends Phaser.Scene {
         this.riceballCooldown = 0;
         this.riceballOnCooldown = false;
 
-        // TODO test für soyfish und chopstick NOCH ENTFERNEN
-        this.spacebarsoyfish = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        this.spacebarchopstick = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         //#endregion
 
         //#region  //! Enemies (OLD Guy && Girl && Wasabi)
@@ -385,17 +382,6 @@ class Scene2 extends Phaser.Scene {
                 }
             }
 
-        }
-        //TODO ZUM DEBUGGEN muss entfernt werden 
-        if (Phaser.Input.Keyboard.JustDown(this.spacebarsoyfish)) {
-            this.avaibleSoyfish = 100;
-            this.shootSoyfish();
-
-        }
-        //TODO  ZUM DEBUGGEN muss entfernt werden 
-        if (Phaser.Input.Keyboard.JustDown(this.spacebarchopstick)) {
-            this.avaibleChopstick = 100;
-            this.shootChopstick();
         }
     }
 
