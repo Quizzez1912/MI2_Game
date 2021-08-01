@@ -27,6 +27,12 @@ class Scene1 extends Phaser.Scene {
 
     this.load.image("showEnemies", "assets/pregame/enemy.png");
 
+    
+    //! Preload endscene
+    this.load.spritesheet("winOni", "assets/endWinJump.png", {
+      frameWidth: 600,
+      frameHeight: 400
+    });
 
 
 
@@ -119,6 +125,14 @@ class Scene1 extends Phaser.Scene {
     //#endregion
 
     //#region  //!Animationen 
+   
+    //! Endscene Jump
+    this.anims.create({
+      key: "oniJump_anim",
+      frames: this.anims.generateFrameNumbers("winOni"),
+      frameRate: 10,
+      repeat: -1
+    }); 
 
     //* ONi baby
     this.anims.create({
@@ -296,7 +310,7 @@ class Scene1 extends Phaser.Scene {
       repeat: 0
     });
 
-
+   
     //#endregion
 
     //#region  //! Create Start Menu (Images & Sprites)  
@@ -352,7 +366,7 @@ class Scene1 extends Phaser.Scene {
 
     //! START SCENE2 SOFORT FÜR TESTZWECK
     //TODO TETSTS
-    // this.scene.start("Win");
+     this.scene.start("Win");
     // this.music.stop();
 
   }
