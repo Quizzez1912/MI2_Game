@@ -391,7 +391,6 @@ class Scene2 extends Phaser.Scene {
             this.avaibleSoyfish = 100;
             this.shootSoyfish();
 
-
         }
         //TODO  ZUM DEBUGGEN muss entfernt werden 
         if (Phaser.Input.Keyboard.JustDown(this.spacebarchopstick)) {
