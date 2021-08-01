@@ -65,9 +65,9 @@ class Scene1 extends Phaser.Scene {
     // Chopstick
     this.load.image("chopstick", "assets/enemy/chopstick.png");
 
-    //* UI Elemente
+    //* HUD Elemente
     // Lebensanzeige
-    this.load.atlas("hp", "assets/UI/hp.png", "assets/UI/hp.json");
+    this.load.atlas("hp", "assets/HUD/hp.png", "assets/HUD/hp.json");
 
     // Bossbar
     this.load.atlas("bosshp", "assets/enemy/bosshp.png", "assets/enemy/bosshp.json");
@@ -167,7 +167,7 @@ class Scene1 extends Phaser.Scene {
 
 
 
-    //* Health UI 
+    //* Health HUD 
     this.anims.create({
       key: "hp5_anim",
       frames: [{ key: "hp", frame: 1 },],
@@ -233,7 +233,7 @@ class Scene1 extends Phaser.Scene {
 
 
     //* BossHP
-    //* Health UI 
+    //* Health HUD 
 
     this.anims.create({
       key: "bosshp4_anim",

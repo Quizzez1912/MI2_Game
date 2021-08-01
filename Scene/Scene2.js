@@ -71,7 +71,7 @@ class Scene2 extends Phaser.Scene {
 
         //#endregion
 
-        //#region //! UI Create
+        //#region //! HUD Create
 
 
         //* Healthbar
